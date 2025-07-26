@@ -1,4 +1,4 @@
-/* CSS Completo Inserido Aqui */
+/* CSS Completo com a adição para YouTube Shorts */
 :root {
   --primary-color: #0d47a1; /* Azul escuro (Sampaio) */
   --secondary-color: #1976d2; /* Azul médio (Sampaio) */
@@ -111,11 +111,41 @@ header nav ul li a.active {
   cursor: pointer;
 }
 
-/* Seção Hero - APENAS IMAGEM */
-.hero {
-  background: url("/img/banner.jpg") no-repeat center center/cover;
+#inicio.hero {
+  /* Imagem padrão para DESKTOP */
+  background-image: url("../img/BANNER.png");
+
+  /* Propriedades de fundo separadas */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  /* Estilos que você já tinha */
   position: relative;
-  min-height: 50vh; /* Altura do banner ajustada */
+  min-height: 70vh;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+/* Media query para dispositivos móveis (largura máxima de 768px) */
+@media (max-width: 768px) {
+  #inicio.hero {
+    background-image: url("/img/banner-mobile.jpg"); /* Sua imagem para mobile */
+    min-height: 60vh;
+  }
+}
+
+/* Você pode adicionar outra media query para tamanhos de tela ainda menores, se necessário */
+@media (max-width: 480px) {
+  #inicio.hero {
+    background-image: url("/img/banner-mobile.jpg"); /* Sua imagem para telas pequenas */
+  }
 }
 
 .hero-overlay {
@@ -341,32 +371,11 @@ section h2::after {
   color: var(--text-light);
   text-align: center;
 }
-.iframe-container {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding-top: 56.25%;
-  background-color: #e9e9e9;
-  border-radius: var(--border-radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-light);
-}
-.iframe-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
 
 /* NOVA SEÇÃO DE PUBLICIDADE (ADSENSE) */
 .ads-section {
   background-color: var(--white);
+  padding-bottom: 40px;
 }
 .ad-placeholder {
   max-width: 970px;
@@ -781,5 +790,394 @@ footer a:hover {
     font-size: 24px;
     bottom: 20px;
     right: 20px;
+  }
+}
+
+/* =================================== */
+/* ======== ESTILOS DA GALERIA ======= */
+/* =================================== */
+
+.gallery-section {
+  background-color: var(--background-light);
+}
+
+.gallery-section h3 {
+  font-family: var(--font-secondary);
+  font-size: 1.7em;
+  color: var(--primary-color);
+  text-align: center;
+  margin-top: 50px; /* Espaçamento entre fotos e vídeos */
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-section h3 i {
+  margin-right: 12px;
+  color: var(--secondary-color);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.gallery-item {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow-light);
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+  box-shadow: var(--box-shadow);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem cubra todo o espaço sem distorcer */
+  display: block;
+}
+
+.iframe-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 177.78%; /* Proporção 9:16 (16 / 9 * 100) */
+  background-color: #e9e9e9;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+}
+
+.iframe-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* CLASSE PARA YOUTUBE SHORTS (FORMATO 9:16) */
+.iframe-container-short {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 177.78%; /* Proporção 9:16 (16 / 9 * 100) */
+  background-color: #e9e9e9;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+}
+
+.iframe-container-short iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ======== ESTILOS DO LIGHTBOX (VISUALIZADOR) ======= */
+
+.lightbox {
+  display: none; /* Escondido por padrão */
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.9);
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox-content {
+  margin: auto;
+  display: block;
+  max-width: 85%;
+  max-height: 85%;
+  border-radius: var(--border-radius);
+  animation: zoomIn 0.4s ease-in-out;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.close-lightbox {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.close-lightbox:hover,
+.close-lightbox:focus {
+  color: #bbb;
+  text-decoration: none;
+}
+
+/* Botões de Navegação do Lightbox */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+  transition: 0.3s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+.next {
+  right: 15px;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev {
+  left: 15px;
+}
+
+.prev:hover,
+.next:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .lightbox-content {
+    max-width: 95%;
+  }
+  .prev,
+  .next {
+    font-size: 20px;
+    padding: 12px;
+  }
+}
+
+/* Estilos do Logótipo */
+.logo-container .logo {
+  height: 85px; /* Defina a altura desejada para o seu logo */
+  width: auto; /* A largura se ajustará automaticamente para manter a proporção */
+  display: block; /* Garante que a imagem se comporte como um bloco */
+}
+
+/* Garante que o link em volta do logo não tenha decoração (como sublinhado) */
+.logo-container a {
+  text-decoration: none;
+}
+
+/* =================================== */
+/* ==== NOVOS ESTILOS ADICIONADOS ==== */
+/* =================================== */
+
+/* Estilos para a Seção Sobre Nós */
+.sobre-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.sobre-imagem img {
+  max-width: 100%;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.sobre-texto h3 {
+  font-family: var(--font-secondary);
+  color: var(--primary-color);
+  font-size: 1.6em;
+  margin-bottom: 15px;
+}
+
+.sobre-texto p {
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+/* Estilos para a Seção de Dicas (Blog) */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.blog-card {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-light);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--box-shadow);
+}
+
+.blog-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.blog-card-content {
+  padding: 25px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card-content h3 {
+  font-family: var(--font-secondary);
+  color: var(--primary-color);
+  font-size: 1.3em;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.blog-card-content p {
+  font-size: 0.95em;
+  color: var(--text-light);
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+.blog-read-more {
+  color: var(--secondary-color);
+  font-weight: bold;
+  text-decoration: none;
+  font-family: var(--font-secondary);
+  align-self: flex-start;
+}
+
+.blog-read-more:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para a Seção FAQ */
+.faq-container {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background-color: var(--white);
+  padding: 20px 25px;
+  border-radius: var(--border-radius);
+  margin-bottom: 15px;
+  border-left: 4px solid var(--secondary-color);
+  box-shadow: var(--box-shadow-light);
+}
+
+.faq-item h3 {
+  font-family: var(--font-secondary);
+  color: var(--primary-color);
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+/* Estilos para o Rodapé */
+.footer-links {
+  margin-top: 15px;
+}
+
+.footer-links a {
+  color: var(--accent-color);
+  margin: 0 10px;
+}
+
+/* Ajustes Responsivos para as Novas Seções */
+@media (max-width: 768px) {
+  .sobre-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .sobre-imagem {
+    margin-bottom: 30px;
+  }
+}
+/* ============================================== */
+/* ==== AJUSTES FINOS DE RESPONSIVIDADE MÓVEL ==== */
+/* ============================================== */
+
+/* Para telas de tablets e celulares maiores (até 992px) */
+@media (max-width: 992px) {
+  /* Garante que os campos do formulário que quebram para baixo tenham espaço entre si */
+  .form-group-half {
+    width: 100%; /* Garante que o campo ocupe toda a largura */
+    margin-right: 0; /* Remove a margem direita que só era útil no desktop */
+    margin-bottom: 20px; /* Adiciona um espaço abaixo do campo */
+  }
+
+  /* Remove a margem do último campo para não criar espaço extra */
+  .form-group-half:last-of-type {
+    margin-bottom: 0;
+  }
+
+  /* Garante que os grupos inline do formulário também tenham espaço ao quebrar */
+  .form-group-inline {
+    flex-direction: column;
+    gap: 0; /* O gap é gerenciado pelo margin-bottom do form-group */
+  }
+}
+
+/* Para telas de celulares em geral (até 768px) */
+@media (max-width: 768px) {
+  /* Reduz o espaçamento vertical das seções para economizar espaço de rolagem */
+  section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  /* Ajusta o padding do container para dar um respiro nas laterais */
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* Ajusta o padding dos fieldsets do formulário em telas menores */
+  #quoteForm fieldset {
+    padding: 25px 20px;
   }
 }

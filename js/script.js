@@ -283,4 +283,68 @@ document.addEventListener("DOMContentLoaded", function () {
     section.style.transition = "opacity 0.6s ease-out, transform 0.6s ease-out"
     observer.observe(section)
   })
+
+  // ===============================================
+  // ===== FUNCIONALIDADE DA GALERIA (LIGHTBOX) ====
+  // ===============================================
+
+  const galleryItems = document.querySelectorAll(".gallery-item img")
+  const lightbox = document.getElementById("lightbox")
+  const lightboxImg = document.getElementById("lightbox-img")
+  const closeBtn = document.getElementById("close-lightbox")
+  const prevBtn = document.getElementById("prev-btn")
+  const nextBtn = document.getElementById("next-btn")
+
+  if (galleryItems.length > 0 && lightbox) {
+    const images = Array.from(galleryItems).map((item) => item.src)
+    let currentIndex = 0
+
+    function showImage(index) {
+      lightboxImg.src = images[index]
+      currentIndex = index
+      lightbox.style.display = "flex"
+    }
+
+    function hideLightbox() {
+      lightbox.style.display = "none"
+    }
+
+    function showNextImage() {
+      const nextIndex = (currentIndex + 1) % images.length
+      showImage(nextIndex)
+    }
+
+    function showPrevImage() {
+      const prevIndex = (currentIndex - 1 + images.length) % images.length
+      showImage(prevIndex)
+    }
+
+    galleryItems.forEach((item, index) => {
+      item.addEventListener("click", () => showImage(index))
+    })
+
+    closeBtn.addEventListener("click", hideLightbox)
+    nextBtn.addEventListener("click", showNextImage)
+    prevBtn.addEventListener("click", showPrevImage)
+
+    // Fechar o lightbox ao clicar fora da imagem
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) {
+        hideLightbox()
+      }
+    })
+
+    // Navegação com as teclas do teclado
+    document.addEventListener("keydown", (e) => {
+      if (lightbox.style.display === "flex") {
+        if (e.key === "ArrowRight") {
+          showNextImage()
+        } else if (e.key === "ArrowLeft") {
+          showPrevImage()
+        } else if (e.key === "Escape") {
+          hideLightbox()
+        }
+      }
+    })
+  }
 })

@@ -213,7 +213,9 @@ function StepNav({
       )}
       {isLast ? (
         <button
+          key="enviar"
           type="submit"
+          data-action="enviar"
           disabled={submitting}
           className="flex items-center gap-2 rounded-lg bg-whatsapp px-6 py-3 font-display font-semibold text-[#0b3d1e] transition hover:brightness-110 disabled:opacity-60"
         >
@@ -221,6 +223,7 @@ function StepNav({
         </button>
       ) : (
         <button
+          key="continuar"
           type="button"
           onClick={onNext}
           className="flex items-center gap-1.5 rounded-lg bg-brand-700 px-6 py-2.5 font-display font-semibold text-white transition hover:bg-brand-900"
@@ -311,7 +314,12 @@ export function QuoteForm() {
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (etapaAtual.id !== "revisao") {
+
+    // Só o clique físico no botão "Enviar pelo WhatsApp" deve enviar. Qualquer outro
+    // jeito de disparar submit (Enter num campo, etc.) apenas avança para a próxima etapa —
+    // isso evita que um clique em "Continuar" seja interpretado como envio por engano.
+    const submitter = (e.nativeEvent as SubmitEvent).submitter
+    if (etapaAtual.id !== "revisao" || submitter?.getAttribute("data-action") !== "enviar") {
       handleNext()
       return
     }

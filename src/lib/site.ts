@@ -14,6 +14,7 @@ export const site = {
     city: "Vila Velha",
     state: "ES",
   },
+  launchYear: 2025,
 } as const
 
 export function whatsappUrl(text?: string) {

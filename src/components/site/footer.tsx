@@ -1,12 +1,13 @@
 import Link from "next/link"
 import { site } from "@/lib/site"
+import { CopyrightYears } from "./copyright-years"
 
 export function Footer() {
   return (
     <footer className="border-t border-border bg-background-alt">
       <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-center text-sm text-muted">
         <p>
-          © {new Date().getFullYear()} {site.name}. Todos os direitos reservados.
+          © <CopyrightYears launchYear={site.launchYear} /> {site.name}. Todos os direitos reservados.
         </p>
         <p>CNPJ: {site.cnpj}</p>
         <p>Sua mudança com segurança e confiança em Vila Velha e para todo o Brasil.</p>

@@ -15,10 +15,15 @@ export const site = {
     state: "ES",
   },
   launchYear: 2025,
+  // TODO: trocar pelo WhatsApp real do Eduardo (o do crédito no rodapé).
+  developer: {
+    name: "Eduardo Allochio",
+    whatsapp: "5500000000000",
+  },
 } as const
 
-export function whatsappUrl(text?: string) {
-  const base = `https://wa.me/${site.whatsapp}`
+export function whatsappUrl(text?: string, number: string = site.whatsapp) {
+  const base = `https://wa.me/${number}`
   return text ? `${base}?text=${encodeURIComponent(text)}` : base
 }
 

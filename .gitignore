@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# planejamento interno (não é conteúdo do produto, fica só local)
+/PLANEJAMENTO.md

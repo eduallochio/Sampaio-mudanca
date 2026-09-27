@@ -3,7 +3,7 @@ import { dicas } from "@/content/dicas"
 import { site } from "@/lib/site"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["", "/politica-de-privacidade", "/termos-de-servico"].map((path) => ({
+  const routes = ["", "/orcamento", "/politica-de-privacidade", "/termos-de-servico"].map((path) => ({
     url: `${site.url}${path}`,
     lastModified: new Date(),
   }))

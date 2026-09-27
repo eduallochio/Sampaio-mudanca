@@ -10,6 +10,7 @@ import {
   IdCard,
   Info,
   MapPin,
+  MessageSquareQuote,
   PackageOpen,
   Phone,
   Truck,
@@ -24,7 +25,6 @@ import { galeria } from "@/content/galeria"
 import { reels } from "@/content/reels"
 import { Gallery } from "@/components/site/gallery"
 import { InstagramReels } from "@/components/site/instagram-reels"
-import { QuoteForm } from "@/components/site/quote-form"
 import { InstagramIcon, WhatsAppIcon } from "@/components/site/brand-icons"
 import { instagramUrl, site, whatsappUrl } from "@/lib/site"
 
@@ -161,7 +161,7 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
-              href="#orcamento"
+              href="/orcamento"
               className="rounded-lg bg-highlight px-6 py-3 font-display font-semibold text-[#1a1a1a] transition hover:brightness-110"
             >
               Solicite seu orçamento online
@@ -212,7 +212,7 @@ export default function Home() {
               Transportar seus bens com a máxima segurança e eficiência, garantindo sua total satisfação. Tratamos cada
               objeto como se fosse nosso, desde a embalagem cuidadosa até a montagem final no seu novo endereço.
             </p>
-            <Link href="#orcamento" className="inline-block rounded-lg bg-highlight px-6 py-3 font-display font-semibold text-[#1a1a1a] transition hover:brightness-110">
+            <Link href="/orcamento" className="inline-block rounded-lg bg-highlight px-6 py-3 font-display font-semibold text-[#1a1a1a] transition hover:brightness-110">
               Fale com a gente
             </Link>
           </div>
@@ -301,10 +301,26 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section id="orcamento">
-        <SectionTitle title="Solicite seu Orçamento" subtitle="Preencha o formulário e receba uma proposta personalizada pelo WhatsApp." />
-        <QuoteForm />
+      <Section id="depoimentos">
+        <SectionTitle title="O Que Nossos Clientes Dizem" subtitle="Depoimentos reais de quem já confiou na Sampaio para sua mudança." />
+        <div className="mx-auto flex max-w-lg flex-col items-center gap-4 rounded-xl border border-dashed border-border bg-surface p-10 text-center text-muted">
+          <MessageSquareQuote className="size-10 text-brand-400" aria-hidden="true" />
+          <p>Em breve, depoimentos de clientes que já fizeram sua mudança com a gente.</p>
+        </div>
       </Section>
+
+      <section className="bg-brand-900 py-14 text-center">
+        <div className="mx-auto max-w-3xl px-4">
+          <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">Pronto para planejar sua mudança?</h2>
+          <p className="mt-3 text-blue-100">Peça um orçamento sem compromisso e receba uma proposta personalizada.</p>
+          <Link
+            href="/orcamento"
+            className="mt-6 inline-block rounded-lg bg-highlight px-8 py-3 font-display font-semibold text-[#1a1a1a] transition hover:brightness-110"
+          >
+            Solicitar orçamento
+          </Link>
+        </div>
+      </section>
 
       <Section id="contato" alt>
         <SectionTitle title="Entre em Contato" subtitle="Estamos prontos para atender você! Tire suas dúvidas ou solicite uma visita técnica." />

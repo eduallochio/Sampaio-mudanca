@@ -6,14 +6,14 @@ import { Menu, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Logo } from "./logo"
 
-const links = [
+// Links de âncora vivem só na home; "orcamento" é uma rota própria (/orcamento).
+const anchorLinks = [
   { id: "inicio", label: "Início" },
   { id: "servicos", label: "Serviços" },
   { id: "sobre-nos", label: "Sobre Nós" },
   { id: "dicas", label: "Dicas" },
-  { id: "orcamento", label: "Orçamento" },
   { id: "contato", label: "Contato" },
-]
+] as const
 
 export function Header() {
   const pathname = usePathname()
@@ -25,7 +25,7 @@ export function Header() {
   // corrigindo o bug da versão antiga que misturava índices de seções e links.
   useEffect(() => {
     if (!isHome) return
-    const sections = links
+    const sections = anchorLinks
       .map((l) => document.getElementById(l.id))
       .filter((el): el is HTMLElement => el !== null)
     const observer = new IntersectionObserver(
@@ -62,8 +62,8 @@ export function Header() {
           id="menu-principal"
           className={`${open ? "block" : "hidden"} absolute inset-x-0 top-16 border-b border-border bg-background-alt md:static md:block md:border-0 md:bg-transparent`}
         >
-          <ul className="flex flex-col md:flex-row md:gap-1">
-            {links.map((l) => {
+          <ul className="flex flex-col md:flex-row md:items-center md:gap-1">
+            {anchorLinks.map((l) => {
               const isActive = isHome && active === l.id
               return (
                 <li key={l.id}>
@@ -80,6 +80,16 @@ export function Header() {
                 </li>
               )
             })}
+            <li className="px-4 py-3 md:px-0 md:py-0 md:ml-2">
+              <Link
+                href="/orcamento"
+                onClick={() => setOpen(false)}
+                aria-current={pathname === "/orcamento" ? "true" : undefined}
+                className="block rounded-lg bg-highlight px-4 py-2 text-center font-display text-sm font-semibold text-[#1a1a1a] transition hover:brightness-110"
+              >
+                Orçamento
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>

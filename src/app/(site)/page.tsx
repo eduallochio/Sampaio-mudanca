@@ -26,6 +26,7 @@ import { reels } from "@/content/reels"
 import { Gallery } from "@/components/site/gallery"
 import { InstagramReels } from "@/components/site/instagram-reels"
 import { InstagramIcon, WhatsAppIcon } from "@/components/site/brand-icons"
+import { Reveal } from "@/components/site/reveal"
 import { instagramUrl, site, whatsappUrl } from "@/lib/site"
 
 const servicos = [
@@ -109,11 +110,11 @@ const jsonLd = {
 
 function SectionTitle({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
-    <div className="mx-auto mb-10 max-w-2xl text-center">
+    <Reveal as="div" className="mx-auto mb-10 max-w-2xl text-center">
       <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">{title}</h2>
       <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-brand-400" />
       {subtitle && <p className="mt-4 text-muted">{subtitle}</p>}
-    </div>
+    </Reveal>
   )
 }
 
@@ -184,12 +185,12 @@ export default function Home() {
           subtitle="Entenda como cuidamos de cada etapa da sua mudança para garantir sua total tranquilidade e segurança."
         />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {servicos.map(({ icon: Icon, title, text }) => (
-            <article key={title} className="rounded-xl border border-border bg-surface p-6 transition hover:-translate-y-1 hover:border-brand-400/60">
-              <Icon className="mb-4 size-10 text-brand-400" aria-hidden="true" />
+          {servicos.map(({ icon: Icon, title, text }, i) => (
+            <Reveal key={title} as="article" index={i} className="group rounded-xl border border-border bg-surface p-6 transition hover:-translate-y-1 hover:border-brand-400/60">
+              <Icon className="icon-wiggle mb-4 size-10 text-brand-400" aria-hidden="true" />
               <h3 className="mb-2 font-display text-lg font-semibold">{title}</h3>
               <p className="text-sm leading-relaxed text-muted">{text}</p>
-            </article>
+            </Reveal>
           ))}
         </div>
       </Section>
@@ -234,8 +235,8 @@ export default function Home() {
       <Section id="dicas" alt>
         <SectionTitle title="Dicas Para Uma Mudança Tranquila" subtitle="Conteúdo para te ajudar a se organizar antes, durante e depois da mudança." />
         <div className="grid gap-6 md:grid-cols-3">
-          {dicas.map((d) => (
-            <article key={d.slug} className="group flex flex-col overflow-hidden rounded-xl border border-border bg-surface">
+          {dicas.map((d, i) => (
+            <Reveal key={d.slug} as="article" index={i} className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-surface">
               <div className="relative aspect-[16/9] overflow-hidden">
                 <Image src={d.image} alt={d.imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" placeholder="blur" />
               </div>
@@ -246,7 +247,7 @@ export default function Home() {
                   Leia mais →
                 </Link>
               </div>
-            </article>
+            </Reveal>
           ))}
         </div>
       </Section>
@@ -254,10 +255,10 @@ export default function Home() {
       <Section id="informacoes">
         <SectionTitle title="Informações Importantes" />
         <div className="grid gap-6 md:grid-cols-2">
-          <InfoCard icon={PackageOpen} title="Nossos serviços incluem">
+          <InfoCard icon={PackageOpen} title="Nossos serviços incluem" index={0}>
             <CheckList items={incluso} />
           </InfoCard>
-          <InfoCard icon={Wallet} title="Valores e pagamento">
+          <InfoCard icon={Wallet} title="Valores e pagamento" index={1}>
             <CheckList
               items={[
                 "Orçamento sem compromisso.",
@@ -275,7 +276,7 @@ export default function Home() {
               ]}
             />
           </InfoCard>
-          <InfoCard icon={Info} title="Observações gerais" className="md:col-span-2">
+          <InfoCard icon={Info} title="Observações gerais" index={2} className="md:col-span-2">
             <CheckList
               items={[
                 "Iniciamos as mudanças entre 08:00 e 08:30 da manhã.",
@@ -289,14 +290,14 @@ export default function Home() {
       <Section id="faq" alt>
         <SectionTitle title="Perguntas Frequentes" subtitle="Tire aqui suas principais dúvidas sobre o processo de mudança conosco." />
         <div className="mx-auto max-w-3xl space-y-3">
-          {faq.map((f) => (
-            <details key={f.q} className="group rounded-xl border border-border bg-surface open:border-brand-400/50">
+          {faq.map((f, i) => (
+            <Reveal key={f.q} as="details" index={i} stagger={70} className="group rounded-xl border border-border bg-surface open:border-brand-400/50">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-display font-semibold [&::-webkit-details-marker]:hidden">
                 {f.q}
                 <span className="text-2xl leading-none text-brand-400 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
               </summary>
               <p className="px-5 pb-5 text-muted">{f.a}</p>
-            </details>
+            </Reveal>
           ))}
         </div>
       </Section>
@@ -325,22 +326,22 @@ export default function Home() {
       <Section id="contato" alt>
         <SectionTitle title="Entre em Contato" subtitle="Estamos prontos para atender você! Tire suas dúvidas ou solicite uma visita técnica." />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <ContactCard icon={<Phone />} title="Telefone / WhatsApp">
+          <ContactCard icon={<Phone />} title="Telefone / WhatsApp" index={0}>
             <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="text-brand-400 hover:underline">
               {site.phoneDisplay}
             </a>
           </ContactCard>
-          <ContactCard icon={<InstagramIcon />} title="Instagram">
+          <ContactCard icon={<InstagramIcon />} title="Instagram" index={1}>
             <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="break-all text-brand-400 hover:underline">
               @{site.instagram}
             </a>
           </ContactCard>
-          <ContactCard icon={<MapPin />} title="Endereço">
+          <ContactCard icon={<MapPin />} title="Endereço" index={2}>
             {site.address.neighborhood} — {site.address.city} — {site.address.state}
             <br />
             <span className="text-sm">Atendemos toda a Grande Vitória e demais regiões</span>
           </ContactCard>
-          <ContactCard icon={<IdCard />} title="CNPJ">
+          <ContactCard icon={<IdCard />} title="CNPJ" index={3}>
             {site.cnpj}
           </ContactCard>
         </div>
@@ -352,21 +353,23 @@ export default function Home() {
 function InfoCard({
   icon: Icon,
   title,
+  index = 0,
   className = "",
   children,
 }: {
   icon: typeof Info
   title: string
+  index?: number
   className?: string
   children: ReactNode
 }) {
   return (
-    <div className={`rounded-xl border border-border bg-surface p-6 ${className}`}>
+    <Reveal index={index} className={`rounded-xl border border-border bg-surface p-6 ${className}`}>
       <h3 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold text-brand-400">
         <Icon className="size-5" /> {title}
       </h3>
       {children}
-    </div>
+    </Reveal>
   )
 }
 
@@ -383,12 +386,24 @@ function CheckList({ items }: { items: ReactNode[] }) {
   )
 }
 
-function ContactCard({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
+function ContactCard({
+  icon,
+  title,
+  index = 0,
+  children,
+}: {
+  icon: ReactNode
+  title: string
+  index?: number
+  children: ReactNode
+}) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-6 text-center text-muted">
-      <div className="mx-auto mb-3 grid size-12 place-items-center rounded-full bg-brand-900 text-white [&>svg]:size-6">{icon}</div>
+    <Reveal index={index} className="group rounded-xl border border-border bg-surface p-6 text-center text-muted">
+      <div className="icon-wiggle mx-auto mb-3 grid size-12 place-items-center rounded-full bg-brand-900 text-white [&>svg]:size-6">
+        {icon}
+      </div>
       <h3 className="mb-2 font-display font-semibold text-foreground">{title}</h3>
       {children}
-    </div>
+    </Reveal>
   )
 }

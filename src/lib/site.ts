@@ -15,10 +15,9 @@ export const site = {
     state: "ES",
   },
   launchYear: 2025,
-  // TODO: trocar pelo WhatsApp real do Eduardo (o do crédito no rodapé).
   developer: {
     name: "Eduardo Allochio",
-    whatsapp: "5500000000000",
+    whatsapp: "5527998714453",
   },
 } as const
 

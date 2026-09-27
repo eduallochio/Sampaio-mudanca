@@ -19,12 +19,9 @@ import {
 import bannerDesktop from "@/assets/banner.jpg"
 import bannerMobile from "@/assets/banner-mobile.jpg"
 import logo from "@/assets/logo.png"
-import foto1 from "@/assets/galeria/1.jpg"
-import foto2 from "@/assets/galeria/2.jpg"
-import foto3 from "@/assets/galeria/3.jpg"
-import foto4 from "@/assets/galeria/4.jpg"
-import foto5 from "@/assets/galeria/5.jpg"
 import { dicas } from "@/content/dicas"
+import { galeria } from "@/content/galeria"
+import { reels } from "@/content/reels"
 import { Gallery } from "@/components/site/gallery"
 import { InstagramReels } from "@/components/site/instagram-reels"
 import { QuoteForm } from "@/components/site/quote-form"
@@ -53,16 +50,6 @@ const servicos = [
     text: "Planejamos e executamos mudanças de escritórios e espaços comerciais com agilidade e organização para minimizar o impacto nas suas operações.",
   },
 ]
-
-const fotos = [
-  { src: foto1, alt: "Equipe preparando móveis para mudança" },
-  { src: foto2, alt: "Caminhão da Sampaio Mudanças carregado" },
-  { src: foto3, alt: "Móvel sendo embalado com plástico bolha" },
-  { src: foto4, alt: "Itens organizados dentro do caminhão" },
-  { src: foto5, alt: "Desmontagem de móvel com ferramentas profissionais" },
-]
-
-const reels = ["DLpn4hTxkwA", "DLkiNaCRZbH", "DH5guKFO_Gc", "DGTlWsTSmKU", "DLdPpH6yxHu"]
 
 const incluso = [
   "1 caminhão baú",
@@ -237,7 +224,7 @@ export default function Home() {
         <h3 className="mb-4 flex items-center gap-2 font-display text-xl font-semibold">
           <Camera className="size-5 text-brand-400" /> Fotos
         </h3>
-        <Gallery photos={fotos} />
+        <Gallery photos={galeria} />
         <h3 className="mt-14 mb-4 flex items-center gap-2 font-display text-xl font-semibold">
           <InstagramIcon className="size-5 text-brand-400" /> Nossos Reels
         </h3>

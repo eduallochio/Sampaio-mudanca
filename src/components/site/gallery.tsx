@@ -1,12 +1,11 @@
 "use client"
 
-import Image, { type StaticImageData } from "next/image"
+import Image from "next/image"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
+import type { Foto } from "@/content/galeria"
 
-type Photo = { src: StaticImageData; alt: string }
-
-export function Gallery({ photos }: { photos: Photo[] }) {
+export function Gallery({ photos }: { photos: Foto[] }) {
   const [index, setIndex] = useState<number | null>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
 

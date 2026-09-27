@@ -1,63 +1,39 @@
-"use client"
+import Image from "next/image"
+import { Play } from "lucide-react"
+import type { Reel } from "@/content/reels"
 
-import Script from "next/script"
-import { useEffect, useRef, useState } from "react"
-
-declare global {
-  interface Window {
-    instgrm?: { Embeds: { process: () => void } }
-  }
-}
-
-// Os embeds do Instagram são pesados: só carregamos o script quando a seção
-// se aproxima da tela, em vez de logo na abertura da página.
-export function InstagramReels({ reels }: { reels: string[] }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true)
-          observer.disconnect()
-        }
-      },
-      { rootMargin: "400px" },
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
+// Thumbnails estáticas com link para o Reel no Instagram, em vez do embed
+// oficial (iframe pesado + layout shift enquanto carrega). O Instagram não
+// oferece hoje uma forma de atualizar isso automaticamente sem integrar a
+// Graph API (conta Business + backend); ver README para o plano dessa fase.
+export function InstagramReels({ reels }: { reels: Reel[] }) {
   return (
-    <div ref={ref} className="grid justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {reels.map((id) => (
-        <blockquote
-          key={id}
-          className="instagram-media w-full max-w-[400px]! min-w-0! rounded-lg! border border-border bg-surface"
-          data-instgrm-captioned
-          data-instgrm-permalink={`https://www.instagram.com/reel/${id}/`}
-          data-instgrm-version="14"
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      {reels.map((r) => (
+        <a
+          key={r.id}
+          href={`https://www.instagram.com/reel/${r.id}/`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative aspect-[9/16] overflow-hidden rounded-lg border border-border focus-visible:outline-2 focus-visible:outline-brand-400"
+          aria-label={`Assistir reel no Instagram: ${r.alt}`}
         >
-          <a
-            href={`https://www.instagram.com/reel/${id}/`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block p-6 text-center text-sm text-brand-400"
-          >
-            Ver este vídeo no Instagram
-          </a>
-        </blockquote>
+          <Image
+            src={r.thumb}
+            alt={r.alt}
+            fill
+            sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            placeholder="blur"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/20" />
+          <div className="absolute inset-0 grid place-items-center">
+            <span className="grid size-12 place-items-center rounded-full bg-white/90 text-brand-900 transition group-hover:scale-110">
+              <Play className="size-6 fill-current" />
+            </span>
+          </div>
+        </a>
       ))}
-      {visible && (
-        <Script
-          src="https://www.instagram.com/embed.js"
-          strategy="lazyOnload"
-          onReady={() => window.instgrm?.Embeds.process()}
-        />
-      )}
     </div>
   )
 }

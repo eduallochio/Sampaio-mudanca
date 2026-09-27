@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/*
+ * Paleta do site — fundo #2f2f2f definido pelo cliente.
+ * Os azuis da marca foram clareados para manter contraste AA sobre o fundo escuro.
+ */
+:root {
+  --background: #2f2f2f;
+  --background-alt: #282828;
+  --surface: #3a3a3a;
+  --surface-hover: #444444;
+  --border: #4d4d4d;
+  --foreground: #ededed;
+  --muted: #b5b5b5;
+
+  --brand-900: #0d47a1;
+  --brand-700: #1976d2;
+  --brand-400: #64b5f6;
+  --highlight: #ffc107;
+  --danger: #ff6b6b;
+  --whatsapp: #25d366;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-brand-900: var(--brand-900);
+  --color-brand-700: var(--brand-700);
+  --color-brand-400: var(--brand-400);
+  --color-highlight: var(--highlight);
+  --color-danger: var(--danger);
+  --color-whatsapp: var(--whatsapp);
+  --font-sans: var(--font-roboto);
+  --font-display: var(--font-poppins);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* compensa o header fixo ao navegar por âncoras */
+  scroll-padding-top: 5rem;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Tipografia dos artigos (dicas e páginas legais) */
+.prose-site h2 {
+  font-family: var(--font-poppins);
+  color: var(--brand-400);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 2.25rem 0 0.75rem;
+}
+.prose-site h3 {
+  font-family: var(--font-poppins);
+  color: var(--foreground);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+}
+.prose-site p {
+  color: var(--muted);
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+.prose-site ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--muted);
+}
+.prose-site li {
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
+}
+.prose-site strong {
+  color: var(--foreground);
+}
+.prose-site a {
+  color: var(--brand-400);
+  text-decoration: underline;
+}

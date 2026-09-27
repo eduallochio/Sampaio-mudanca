@@ -152,8 +152,18 @@ export default function Home() {
 
       <Hero />
 
-      <section className="bg-brand-900 py-12 text-center">
-        <div className="mx-auto max-w-4xl px-4">
+      <section className="relative overflow-hidden bg-brand-900 py-14 text-center">
+        {/* Textura sutil de fundo para não ficar um azul chapado */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 20%, white 1px, transparent 1px), radial-gradient(circle at 80% 60%, white 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+          aria-hidden="true"
+        />
+        <Reveal as="div" className="relative mx-auto max-w-4xl px-4">
           <h1 className="font-display text-3xl font-bold text-white sm:text-4xl">
             Fretes e Mudanças em Vila Velha com Segurança
           </h1>
@@ -163,7 +173,7 @@ export default function Home() {
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               href="/orcamento"
-              className="rounded-lg bg-highlight px-6 py-3 font-display font-semibold text-[#1a1a1a] transition hover:brightness-110"
+              className="rounded-lg bg-highlight px-6 py-3 font-display font-semibold text-[#1a1a1a] transition hover:scale-105 hover:brightness-110"
             >
               Solicite seu orçamento online
             </Link>
@@ -171,12 +181,12 @@ export default function Home() {
               href={whatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 rounded-lg border-2 border-white/80 px-6 py-3 font-display font-semibold text-white transition hover:bg-white/10"
+              className="flex items-center justify-center gap-2 rounded-lg border-2 border-white/80 px-6 py-3 font-display font-semibold text-white transition hover:scale-105 hover:bg-white/10"
             >
               <WhatsAppIcon className="size-5" /> {site.phoneDisplay}
             </a>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <Section id="servicos">
@@ -198,25 +208,29 @@ export default function Home() {
       <Section id="sobre-nos" alt>
         <SectionTitle title="Conheça a Sampaio" subtitle="Mais do que uma transportadora, somos parceiros na sua nova jornada." />
         <div className="grid items-center gap-10 md:grid-cols-2">
-          <div className="rounded-2xl bg-white p-8">
-            <Image src={logo} alt="Logotipo da Sampaio Fretes e Mudanças" sizes="(min-width: 768px) 40vw, 90vw" className="mx-auto h-auto w-full max-w-md" />
-          </div>
-          <div className="space-y-4">
-            <h3 className="font-display text-xl font-semibold text-brand-400">Nossa História</h3>
-            <p className="text-muted">
-              A Sampaio Fretes e Mudanças nasceu em Vila Velha, ES, do desejo de oferecer um serviço de mudança que fosse
-              sinônimo de cuidado e confiança. Com anos de experiência no setor, entendemos que cada mudança é única e
-              representa o início de um novo capítulo na vida de nossos clientes.
-            </p>
-            <h3 className="font-display text-xl font-semibold text-brand-400">Nossa Missão</h3>
-            <p className="text-muted">
-              Transportar seus bens com a máxima segurança e eficiência, garantindo sua total satisfação. Tratamos cada
-              objeto como se fosse nosso, desde a embalagem cuidadosa até a montagem final no seu novo endereço.
-            </p>
-            <Link href="/orcamento" className="inline-block rounded-lg bg-highlight px-6 py-3 font-display font-semibold text-[#1a1a1a] transition hover:brightness-110">
+          <Reveal index={0} className="rounded-2xl border border-border bg-white p-10 shadow-lg shadow-black/20">
+            <Image src={logo} alt="Logotipo da Sampaio Fretes e Mudanças" sizes="(min-width: 768px) 40vw, 90vw" className="mx-auto h-auto w-full max-w-sm" />
+          </Reveal>
+          <Reveal index={1} className="space-y-5">
+            <div>
+              <h3 className="font-display text-xl font-semibold text-brand-400">Nossa História</h3>
+              <p className="mt-2 text-muted">
+                A Sampaio Fretes e Mudanças nasceu em Vila Velha, ES, do desejo de oferecer um serviço de mudança que fosse
+                sinônimo de cuidado e confiança. Com anos de experiência no setor, entendemos que cada mudança é única e
+                representa o início de um novo capítulo na vida de nossos clientes.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-display text-xl font-semibold text-brand-400">Nossa Missão</h3>
+              <p className="mt-2 text-muted">
+                Transportar seus bens com a máxima segurança e eficiência, garantindo sua total satisfação. Tratamos cada
+                objeto como se fosse nosso, desde a embalagem cuidadosa até a montagem final no seu novo endereço.
+              </p>
+            </div>
+            <Link href="/orcamento" className="inline-block rounded-lg bg-highlight px-6 py-3 font-display font-semibold text-[#1a1a1a] transition hover:scale-105 hover:brightness-110">
               Fale com a gente
             </Link>
-          </div>
+          </Reveal>
         </div>
       </Section>
 
@@ -310,17 +324,26 @@ export default function Home() {
         </div>
       </Section>
 
-      <section className="bg-brand-900 py-14 text-center">
-        <div className="mx-auto max-w-3xl px-4">
+      <section className="relative overflow-hidden bg-brand-900 py-14 text-center">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 15% 70%, white 1px, transparent 1px), radial-gradient(circle at 85% 30%, white 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+          aria-hidden="true"
+        />
+        <Reveal as="div" className="relative mx-auto max-w-3xl px-4">
           <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">Pronto para planejar sua mudança?</h2>
           <p className="mt-3 text-blue-100">Peça um orçamento sem compromisso e receba uma proposta personalizada.</p>
           <Link
             href="/orcamento"
-            className="mt-6 inline-block rounded-lg bg-highlight px-8 py-3 font-display font-semibold text-[#1a1a1a] transition hover:brightness-110"
+            className="mt-6 inline-block rounded-lg bg-highlight px-8 py-3 font-display font-semibold text-[#1a1a1a] transition hover:scale-105 hover:brightness-110"
           >
             Solicitar orçamento
           </Link>
-        </div>
+        </Reveal>
       </section>
 
       <Section id="contato" alt>

@@ -11,6 +11,8 @@ export type Dica = {
   excerpt: string
   image: StaticImageData
   imageAlt: string
+  /** Tempo estimado de leitura, em minutos (ajuste manualmente ao editar o conteúdo). */
+  readingMinutes: number
   content: ReactNode
 }
 
@@ -25,6 +27,7 @@ export const dicas: Dica[] = [
       "Não sabe por onde começar? Criamos um checklist completo para você organizar todas as etapas da sua mudança, desde a triagem de itens até a alteração de endereço nos serviços.",
     image: checklistImg,
     imageAlt: "Caixas organizadas para mudança",
+    readingMinutes: 5,
     content: (
       <>
         <p>
@@ -104,6 +107,7 @@ export const dicas: Dica[] = [
       "Aprenda as técnicas e os materiais certos para proteger seus pratos, copos e objetos de decoração. Evite surpresas desagradáveis ao abrir as caixas no novo lar.",
     image: frageisImg,
     imageAlt: "Pessoa embalando um objeto frágil",
+    readingMinutes: 4,
     content: (
       <>
         <p>
@@ -184,6 +188,7 @@ export const dicas: Dica[] = [
       "Uma dica simples que economiza horas de trabalho na hora de desempacotar. Saiba como etiquetar suas caixas de forma eficiente, indicando o cômodo e o conteúdo.",
     image: etiquetarImg,
     imageAlt: "Caixa com a etiqueta 'cozinha'",
+    readingMinutes: 4,
     content: (
       <>
         <p>

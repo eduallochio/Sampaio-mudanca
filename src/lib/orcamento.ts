@@ -31,22 +31,42 @@ const endereco = (sufixo: string) =>
     detalhes: z.string().trim().default(""),
   })
 
-export const orcamentoSchema = z.object({
+const contatoSchema = z.object({
   nome: obrigatorio("seu nome"),
   telefone: z
     .string()
     .transform((v) => v.replace(/\D/g, ""))
     .pipe(z.string().regex(/^\d{10,11}$/, "Telefone inválido. Use DDD + número")),
   email: z.union([z.literal(""), z.email("E-mail inválido")]).default(""),
-  origem: endereco("origem"),
-  destino: endereco("destino"),
+})
+
+const origemSchema = z.object({ origem: endereco("origem") })
+const destinoSchema = z.object({ destino: endereco("destino") })
+
+const mudancaSchema = z.object({
   dataMudanca: z.iso.date("Informe a data da mudança"),
   itens: obrigatorio("os principais itens da mudança"),
   servicos: z.array(z.enum(SERVICOS_ADICIONAIS)).default([]),
   observacoes: z.string().trim().default(""),
 })
 
+export const orcamentoSchema = z.object({
+  ...contatoSchema.shape,
+  ...origemSchema.shape,
+  ...destinoSchema.shape,
+  ...mudancaSchema.shape,
+})
+
 export type Orcamento = z.infer<typeof orcamentoSchema>
+
+/** Uma etapa do wizard: schema para validar só os campos dessa etapa + os nomes de campo que ela contém. */
+export const etapas = [
+  { id: "contato", titulo: "Seus dados", schema: contatoSchema, campos: ["nome", "telefone", "email"] },
+  { id: "origem", titulo: "Endereço de origem", schema: origemSchema, campos: ["origem"] },
+  { id: "destino", titulo: "Endereço de destino", schema: destinoSchema, campos: ["destino"] },
+  { id: "mudanca", titulo: "Detalhes da mudança", schema: mudancaSchema, campos: ["dataMudanca", "itens", "servicos", "observacoes"] },
+  { id: "revisao", titulo: "Revisão", schema: null, campos: [] },
+] as const
 
 /** Converte o FormData do formulário (campos "origem.rua" etc.) para o formato do schema. */
 export function formDataToObject(fd: FormData) {

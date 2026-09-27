@@ -7,6 +7,7 @@ import {
   formDataToObject,
   formatCep,
   formatTelefone,
+  GRUPOS_ITENS,
   mensagemWhatsApp,
   orcamentoSchema,
   SERVICOS_ADICIONAIS,
@@ -336,6 +337,11 @@ export function QuoteForm() {
     () => (review?.servicos.length ? review.servicos.join(", ") : "Nenhum"),
     [review],
   )
+  const itensResumo = useMemo(() => {
+    if (!review) return ""
+    const todos = [...review.itensSelecionados, ...(review.itensOutros ? [review.itensOutros] : [])]
+    return todos.join(", ")
+  }, [review])
 
   return (
     <form ref={formRef} onSubmit={onSubmit} noValidate className="mx-auto max-w-2xl">
@@ -376,14 +382,38 @@ export function QuoteForm() {
           <Field name="dataMudanca" label="Data pretendida" errors={errors} className="sm:max-w-xs">
             <input {...a11y("dataMudanca", errors)} type="date" min={minDate} className={inputClass} />
           </Field>
-          <Field name="itens" label="Principais itens da mudança" errors={errors}>
-            <textarea
-              {...a11y("itens", errors)}
-              rows={6}
-              placeholder="Ex: Geladeira duplex, fogão 6 bocas, máquina de lavar 15kg, sofá 3 lugares, cama casal + colchão, guarda-roupa 6 portas, ~20 caixas médias..."
-              className={inputClass}
-            />
-          </Field>
+          <div>
+            <p className="mb-1 text-sm font-medium text-foreground">Principais itens da mudança</p>
+            <p className="mb-3 text-sm text-muted">Marque os itens que você vai levar. Não precisa ser exato.</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {GRUPOS_ITENS.map((g) => (
+                <div key={g.grupo}>
+                  <p className="mb-2 text-xs font-semibold tracking-wide text-brand-400 uppercase">{g.grupo}</p>
+                  <div className="grid gap-2">
+                    {g.itens.map((item) => (
+                      <label key={item} className="flex items-center gap-3 text-muted">
+                        <input type="checkbox" name="itensSelecionados" value={item} className="size-5 accent-brand-700" />
+                        {item}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Field name="itensOutros" label="Outros itens (opcional)" errors={errors} className="mt-4">
+              <textarea
+                {...a11y("itensOutros", errors)}
+                rows={3}
+                placeholder="Algo que não está na lista? Descreva aqui (ex: piano, aquário, quantidade de caixas...)"
+                className={inputClass}
+              />
+            </Field>
+            {errors.itensSelecionados && (
+              <p role="alert" className="mt-2 text-sm text-danger">
+                {errors.itensSelecionados}
+              </p>
+            )}
+          </div>
           <div>
             <p className="mb-2 text-sm font-medium text-foreground">Serviços adicionais</p>
             <div className="grid gap-2">
@@ -420,7 +450,7 @@ export function QuoteForm() {
                 value={new Date(review.dataMudanca + "T00:00:00").toLocaleDateString("pt-BR")}
                 onEdit={() => goTo(3)}
               />
-              <ReviewRow label="Itens" value={<span className="whitespace-pre-line">{review.itens}</span>} onEdit={() => goTo(3)} />
+              <ReviewRow label="Itens" value={itensResumo} onEdit={() => goTo(3)} />
               <ReviewRow label="Serviços adicionais" value={servicosSelecionados} onEdit={() => goTo(3)} />
             </dl>
           )}

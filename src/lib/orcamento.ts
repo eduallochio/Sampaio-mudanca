@@ -13,6 +13,32 @@ export const SERVICOS_ADICIONAIS = [
   "Içamento (se necessário)",
 ] as const
 
+// Itens comuns de uma mudança, agrupados por cômodo, para marcação rápida no formulário.
+export const GRUPOS_ITENS = [
+  {
+    grupo: "Sala",
+    itens: ["Sofá", "Rack / painel de TV", "Mesa de centro", "Estante", "Poltrona"],
+  },
+  {
+    grupo: "Quarto",
+    itens: ["Cama de casal", "Cama de solteiro", "Guarda-roupa", "Cômoda", "Criado-mudo", "Colchão"],
+  },
+  {
+    grupo: "Cozinha",
+    itens: ["Geladeira", "Fogão", "Micro-ondas", "Mesa de jantar + cadeiras", "Armário de cozinha"],
+  },
+  {
+    grupo: "Área de serviço",
+    itens: ["Máquina de lavar", "Tanque", "Armário/multiuso"],
+  },
+  {
+    grupo: "Outros",
+    itens: ["Caixas de papelão", "Eletrodomésticos pequenos", "Ar-condicionado", "Escrivaninha / home office"],
+  },
+] as const
+
+export const ITENS_MUDANCA = GRUPOS_ITENS.flatMap((g) => g.itens)
+
 const obrigatorio = (campo: string) => z.string().trim().min(1, `Informe ${campo}`)
 
 const endereco = (sufixo: string) =>
@@ -43,19 +69,31 @@ const contatoSchema = z.object({
 const origemSchema = z.object({ origem: endereco("origem") })
 const destinoSchema = z.object({ destino: endereco("destino") })
 
-const mudancaSchema = z.object({
+const itensObrigatorios = <T extends { itensSelecionados: string[]; itensOutros: string }>(v: T) =>
+  v.itensSelecionados.length > 0 || v.itensOutros.length > 0
+const itensObrigatoriosIssue = {
+  error: "Marque ao menos um item ou descreva os itens da mudança",
+  path: ["itensSelecionados"] as PropertyKey[],
+}
+
+const mudancaObjectSchema = z.object({
   dataMudanca: z.iso.date("Informe a data da mudança"),
-  itens: obrigatorio("os principais itens da mudança"),
+  itensSelecionados: z.array(z.enum(ITENS_MUDANCA)).default([]),
+  itensOutros: z.string().trim().default(""),
   servicos: z.array(z.enum(SERVICOS_ADICIONAIS)).default([]),
   observacoes: z.string().trim().default(""),
 })
 
-export const orcamentoSchema = z.object({
-  ...contatoSchema.shape,
-  ...origemSchema.shape,
-  ...destinoSchema.shape,
-  ...mudancaSchema.shape,
-})
+const mudancaSchema = mudancaObjectSchema.refine(itensObrigatorios, itensObrigatoriosIssue)
+
+export const orcamentoSchema = z
+  .object({
+    ...contatoSchema.shape,
+    ...origemSchema.shape,
+    ...destinoSchema.shape,
+    ...mudancaObjectSchema.shape,
+  })
+  .refine(itensObrigatorios, itensObrigatoriosIssue)
 
 export type Orcamento = z.infer<typeof orcamentoSchema>
 
@@ -64,16 +102,24 @@ export const etapas = [
   { id: "contato", titulo: "Seus dados", schema: contatoSchema, campos: ["nome", "telefone", "email"] },
   { id: "origem", titulo: "Endereço de origem", schema: origemSchema, campos: ["origem"] },
   { id: "destino", titulo: "Endereço de destino", schema: destinoSchema, campos: ["destino"] },
-  { id: "mudanca", titulo: "Detalhes da mudança", schema: mudancaSchema, campos: ["dataMudanca", "itens", "servicos", "observacoes"] },
+  {
+    id: "mudanca",
+    titulo: "Detalhes da mudança",
+    schema: mudancaSchema,
+    campos: ["dataMudanca", "itensSelecionados", "itensOutros", "servicos", "observacoes"],
+  },
   { id: "revisao", titulo: "Revisão", schema: null, campos: [] },
 ] as const
+
+// Campos de checkbox múltiplo (vários <input> com o mesmo name) viram array no objeto final.
+const CAMPOS_MULTIPLOS = ["servicos", "itensSelecionados"]
 
 /** Converte o FormData do formulário (campos "origem.rua" etc.) para o formato do schema. */
 export function formDataToObject(fd: FormData) {
   const obj: Record<string, unknown> = {}
   for (const [key, value] of fd.entries()) {
-    if (key === "servicos") {
-      ;((obj.servicos as string[] | undefined) ?? (obj.servicos = [])).push(String(value))
+    if (CAMPOS_MULTIPLOS.includes(key)) {
+      ;((obj[key] as string[] | undefined) ?? (obj[key] = [])).push(String(value))
       continue
     }
     const [group, field] = key.split(".")
@@ -118,7 +164,8 @@ export function mensagemWhatsApp(o: Orcamento) {
   m += `\n🚚 *Origem:*\n${formatEndereco(o.origem)}`
   m += `\n🏁 *Destino:*\n${formatEndereco(o.destino)}`
   m += `\n🗓️ *Data da Mudança:*\n  ${dia}/${mes}/${ano}\n`
-  m += `\n📦 *Principais Itens:*\n${o.itens}\n`
+  const itens = [...o.itensSelecionados, ...(o.itensOutros ? [o.itensOutros] : [])].join("\n  - ")
+  m += `\n📦 *Principais Itens:*\n  - ${itens}\n`
   if (o.servicos.length) m += `\n🛠️ *Serviços Adicionais:*\n  ${o.servicos.join(", ")}\n`
   if (o.observacoes) m += `\n📄 *Observações:*\n  ${o.observacoes}\n`
   m += `\n\n_Mensagem enviada pelo site._`

@@ -16,7 +16,6 @@ import {
   type Orcamento,
 } from "@/lib/orcamento"
 import { whatsappUrl } from "@/lib/site"
-import { WhatsAppIcon } from "./brand-icons"
 import { OrderModal, type OrderModalHandle } from "./order-modal"
 
 type Errors = Record<string, string>
@@ -191,12 +190,10 @@ function StepNav({
   step,
   onBack,
   onNext,
-  submitting,
 }: {
   step: number
   onBack: () => void
   onNext?: () => void
-  submitting?: boolean
 }) {
   const isLast = step === etapas.length - 1
   return (
@@ -217,10 +214,9 @@ function StepNav({
           key="enviar"
           type="submit"
           data-action="enviar"
-          disabled={submitting}
-          className="flex items-center gap-2 rounded-lg bg-whatsapp px-6 py-3 font-display font-semibold text-[#0b3d1e] transition hover:brightness-110 disabled:opacity-60"
+          className="flex items-center gap-2 rounded-lg bg-brand-700 px-6 py-3 font-display font-semibold text-white transition hover:bg-brand-900"
         >
-          <WhatsAppIcon className="size-5" /> Enviar pelo WhatsApp
+          Salvar solicitação
         </button>
       ) : (
         <button
@@ -257,7 +253,6 @@ function ReviewRow({ label, value, onEdit }: { label: string; value: ReactNode; 
 export function QuoteForm() {
   const [step, setStep] = useState(0)
   const [errors, setErrors] = useState<Errors>({})
-  const [submitting, setSubmitting] = useState(false)
   const [review, setReview] = useState<Orcamento | null>(null)
   // Data mínima calculada uma vez, no fuso horário do visitante (evita useEffect + setState).
   const [minDate] = useState(() => {
@@ -337,13 +332,11 @@ export function QuoteForm() {
       return
     }
 
-    // A animação do modal roda primeiro; só ao terminar é que o WhatsApp abre —
-    // assim a pessoa vê a confirmação visual antes da troca de aba.
-    setSubmitting(true)
-    modalRef.current?.play(() => {
-      window.open(whatsappUrl(mensagemWhatsApp(result.data)), "_blank", "noopener")
-      setSubmitting(false)
-    })
+    // O modal anima primeiro; ao terminar, mostra um botão "Enviar pelo WhatsApp"
+    // dentro dele — window.open() só escapa do bloqueador de pop-up quando é
+    // resultado direto e síncrono de um clique, então não pode ser chamado aqui
+    // dentro (isso rodaria atrasado, dentro de um setTimeout do modal).
+    modalRef.current?.play(whatsappUrl(mensagemWhatsApp(result.data)))
   }
 
   const errorCount = Object.keys(errors).length
@@ -470,7 +463,7 @@ export function QuoteForm() {
               </dl>
             )}
             <p className="mt-4 text-sm text-muted">
-              Ao enviar, abriremos o WhatsApp com essa solicitação já preenchida para você confirmar o envio.
+              Ao salvar, preparamos sua solicitação e mostramos um botão para você enviá-la pelo WhatsApp.
             </p>
           </div>
 
@@ -480,7 +473,7 @@ export function QuoteForm() {
             </p>
           )}
 
-          <StepNav step={step} onBack={handleBack} onNext={handleNext} submitting={submitting} />
+          <StepNav step={step} onBack={handleBack} onNext={handleNext} />
         </div>
       </form>
 

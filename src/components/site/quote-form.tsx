@@ -16,7 +16,8 @@ import {
   type Orcamento,
 } from "@/lib/orcamento"
 import { whatsappUrl } from "@/lib/site"
-import { OrderButton } from "./order-button"
+import { WhatsAppIcon } from "./brand-icons"
+import { OrderModal, type OrderModalHandle } from "./order-modal"
 
 type Errors = Record<string, string>
 
@@ -212,14 +213,15 @@ function StepNav({
         <span />
       )}
       {isLast ? (
-        <OrderButton
+        <button
           key="enviar"
           type="submit"
           data-action="enviar"
           disabled={submitting}
-          label="Enviar pelo WhatsApp"
-          successLabel="Enviado"
-        />
+          className="flex items-center gap-2 rounded-lg bg-whatsapp px-6 py-3 font-display font-semibold text-[#0b3d1e] transition hover:brightness-110 disabled:opacity-60"
+        >
+          <WhatsAppIcon className="size-5" /> Enviar pelo WhatsApp
+        </button>
       ) : (
         <button
           key="continuar"
@@ -263,6 +265,7 @@ export function QuoteForm() {
     return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10)
   })
   const formRef = useRef<HTMLFormElement>(null)
+  const modalRef = useRef<OrderModalHandle>(null)
 
   const etapaAtual = etapas[step]
 
@@ -334,9 +337,13 @@ export function QuoteForm() {
       return
     }
 
+    // A animação do modal roda primeiro; só ao terminar é que o WhatsApp abre —
+    // assim a pessoa vê a confirmação visual antes da troca de aba.
     setSubmitting(true)
-    window.open(whatsappUrl(mensagemWhatsApp(result.data)), "_blank", "noopener")
-    setSubmitting(false)
+    modalRef.current?.play(() => {
+      window.open(whatsappUrl(mensagemWhatsApp(result.data)), "_blank", "noopener")
+      setSubmitting(false)
+    })
   }
 
   const errorCount = Object.keys(errors).length
@@ -351,129 +358,133 @@ export function QuoteForm() {
   }, [review])
 
   return (
-    <form ref={formRef} onSubmit={onSubmit} noValidate className="mx-auto max-w-2xl">
-      <Stepper step={step} />
+    <>
+      <form ref={formRef} onSubmit={onSubmit} noValidate className="mx-auto max-w-2xl">
+        <Stepper step={step} />
 
-      <div className="rounded-xl border border-border bg-surface p-5 sm:p-6">
-        {/* Todas as etapas ficam montadas no DOM (só escondidas) para não perder valores digitados ao navegar */}
-        <div className={step === 0 ? "grid gap-4" : "hidden"} aria-hidden={step !== 0}>
-          <Field name="nome" label="Nome completo" errors={errors}>
-            <input {...a11y("nome", errors)} autoComplete="name" className={inputClass} />
-          </Field>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field name="telefone" label="Telefone (WhatsApp)" errors={errors}>
-              <input
-                {...a11y("telefone", errors)}
-                type="tel"
-                autoComplete="tel-national"
-                placeholder="(27) 99999-9999"
-                className={inputClass}
-                onChange={(e) => (e.currentTarget.value = formatTelefone(e.currentTarget.value))}
-              />
+        <div className="rounded-xl border border-border bg-surface p-5 sm:p-6">
+          {/* Todas as etapas ficam montadas no DOM (só escondidas) para não perder valores digitados ao navegar */}
+          <div className={step === 0 ? "grid gap-4" : "hidden"} aria-hidden={step !== 0}>
+            <Field name="nome" label="Nome completo" errors={errors}>
+              <input {...a11y("nome", errors)} autoComplete="name" className={inputClass} />
             </Field>
-            <Field name="email" label="E-mail (opcional)" errors={errors}>
-              <input {...a11y("email", errors)} type="email" autoComplete="email" className={inputClass} />
-            </Field>
-          </div>
-        </div>
-
-        <div className={step === 1 ? "grid gap-4" : "hidden"} aria-hidden={step !== 1}>
-          <AddressFields prefix="origem" errors={errors} />
-        </div>
-
-        <div className={step === 2 ? "grid gap-4" : "hidden"} aria-hidden={step !== 2}>
-          <AddressFields prefix="destino" errors={errors} />
-        </div>
-
-        <div className={step === 3 ? "grid gap-4" : "hidden"} aria-hidden={step !== 3}>
-          <Field name="dataMudanca" label="Data pretendida" errors={errors} className="sm:max-w-xs">
-            <input {...a11y("dataMudanca", errors)} type="date" min={minDate} className={inputClass} />
-          </Field>
-          <div>
-            <p className="mb-1 text-sm font-medium text-foreground">Principais itens da mudança</p>
-            <p className="mb-3 text-sm text-muted">Marque os itens que você vai levar. Não precisa ser exato.</p>
             <div className="grid gap-4 sm:grid-cols-2">
-              {GRUPOS_ITENS.map((g) => (
-                <div key={g.grupo}>
-                  <p className="mb-2 text-xs font-semibold tracking-wide text-brand-400 uppercase">{g.grupo}</p>
-                  <div className="grid gap-2">
-                    {g.itens.map((item) => (
-                      <label key={item} className="flex items-center gap-3 text-muted">
-                        <input type="checkbox" name="itensSelecionados" value={item} className="size-5 accent-brand-700" />
-                        {item}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ))}
+              <Field name="telefone" label="Telefone (WhatsApp)" errors={errors}>
+                <input
+                  {...a11y("telefone", errors)}
+                  type="tel"
+                  autoComplete="tel-national"
+                  placeholder="(27) 99999-9999"
+                  className={inputClass}
+                  onChange={(e) => (e.currentTarget.value = formatTelefone(e.currentTarget.value))}
+                />
+              </Field>
+              <Field name="email" label="E-mail (opcional)" errors={errors}>
+                <input {...a11y("email", errors)} type="email" autoComplete="email" className={inputClass} />
+              </Field>
             </div>
-            <Field name="itensOutros" label="Outros itens (opcional)" errors={errors} className="mt-4">
-              <textarea
-                {...a11y("itensOutros", errors)}
-                rows={3}
-                placeholder="Algo que não está na lista? Descreva aqui (ex: piano, aquário, quantidade de caixas...)"
-                className={inputClass}
-              />
+          </div>
+
+          <div className={step === 1 ? "grid gap-4" : "hidden"} aria-hidden={step !== 1}>
+            <AddressFields prefix="origem" errors={errors} />
+          </div>
+
+          <div className={step === 2 ? "grid gap-4" : "hidden"} aria-hidden={step !== 2}>
+            <AddressFields prefix="destino" errors={errors} />
+          </div>
+
+          <div className={step === 3 ? "grid gap-4" : "hidden"} aria-hidden={step !== 3}>
+            <Field name="dataMudanca" label="Data pretendida" errors={errors} className="sm:max-w-xs">
+              <input {...a11y("dataMudanca", errors)} type="date" min={minDate} className={inputClass} />
             </Field>
-            {errors.itensSelecionados && (
-              <p role="alert" className="mt-2 text-sm text-danger">
-                {errors.itensSelecionados}
-              </p>
-            )}
-          </div>
-          <div>
-            <p className="mb-2 text-sm font-medium text-foreground">Serviços adicionais</p>
-            <div className="grid gap-2">
-              {SERVICOS_ADICIONAIS.map((s) => (
-                <label key={s} className="flex items-center gap-3 text-muted">
-                  <input type="checkbox" name="servicos" value={s} className="size-5 accent-brand-700" />
-                  {s}
-                </label>
-              ))}
+            <div>
+              <p className="mb-1 text-sm font-medium text-foreground">Principais itens da mudança</p>
+              <p className="mb-3 text-sm text-muted">Marque os itens que você vai levar. Não precisa ser exato.</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {GRUPOS_ITENS.map((g) => (
+                  <div key={g.grupo}>
+                    <p className="mb-2 text-xs font-semibold tracking-wide text-brand-400 uppercase">{g.grupo}</p>
+                    <div className="grid gap-2">
+                      {g.itens.map((item) => (
+                        <label key={item} className="flex items-center gap-3 text-muted">
+                          <input type="checkbox" name="itensSelecionados" value={item} className="size-5 accent-brand-700" />
+                          {item}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Field name="itensOutros" label="Outros itens (opcional)" errors={errors} className="mt-4">
+                <textarea
+                  {...a11y("itensOutros", errors)}
+                  rows={3}
+                  placeholder="Algo que não está na lista? Descreva aqui (ex: piano, aquário, quantidade de caixas...)"
+                  className={inputClass}
+                />
+              </Field>
+              {errors.itensSelecionados && (
+                <p role="alert" className="mt-2 text-sm text-danger">
+                  {errors.itensSelecionados}
+                </p>
+              )}
             </div>
+            <div>
+              <p className="mb-2 text-sm font-medium text-foreground">Serviços adicionais</p>
+              <div className="grid gap-2">
+                {SERVICOS_ADICIONAIS.map((s) => (
+                  <label key={s} className="flex items-center gap-3 text-muted">
+                    <input type="checkbox" name="servicos" value={s} className="size-5 accent-brand-700" />
+                    {s}
+                  </label>
+                ))}
+              </div>
+            </div>
+            <Field name="observacoes" label="Observações" errors={errors}>
+              <textarea {...a11y("observacoes", errors)} rows={3} placeholder="Alguma informação extra importante?" className={inputClass} />
+            </Field>
           </div>
-          <Field name="observacoes" label="Observações" errors={errors}>
-            <textarea {...a11y("observacoes", errors)} rows={3} placeholder="Alguma informação extra importante?" className={inputClass} />
-          </Field>
-        </div>
 
-        <div className={step === 4 ? "block" : "hidden"} aria-hidden={step !== 4}>
-          {review && (
-            <dl>
-              <ReviewRow label="Nome" value={review.nome} onEdit={() => goTo(0)} />
-              <ReviewRow label="Telefone" value={formatTelefone(review.telefone)} onEdit={() => goTo(0)} />
-              <ReviewRow
-                label="Origem"
-                value={`${review.origem.rua}, ${review.origem.numero} — ${review.origem.bairro}, ${review.origem.cidade}/${review.origem.uf}`}
-                onEdit={() => goTo(1)}
-              />
-              <ReviewRow
-                label="Destino"
-                value={`${review.destino.rua}, ${review.destino.numero} — ${review.destino.bairro}, ${review.destino.cidade}/${review.destino.uf}`}
-                onEdit={() => goTo(2)}
-              />
-              <ReviewRow
-                label="Data da mudança"
-                value={new Date(review.dataMudanca + "T00:00:00").toLocaleDateString("pt-BR")}
-                onEdit={() => goTo(3)}
-              />
-              <ReviewRow label="Itens" value={itensResumo} onEdit={() => goTo(3)} />
-              <ReviewRow label="Serviços adicionais" value={servicosSelecionados} onEdit={() => goTo(3)} />
-            </dl>
+          <div className={step === 4 ? "block" : "hidden"} aria-hidden={step !== 4}>
+            {review && (
+              <dl>
+                <ReviewRow label="Nome" value={review.nome} onEdit={() => goTo(0)} />
+                <ReviewRow label="Telefone" value={formatTelefone(review.telefone)} onEdit={() => goTo(0)} />
+                <ReviewRow
+                  label="Origem"
+                  value={`${review.origem.rua}, ${review.origem.numero} — ${review.origem.bairro}, ${review.origem.cidade}/${review.origem.uf}`}
+                  onEdit={() => goTo(1)}
+                />
+                <ReviewRow
+                  label="Destino"
+                  value={`${review.destino.rua}, ${review.destino.numero} — ${review.destino.bairro}, ${review.destino.cidade}/${review.destino.uf}`}
+                  onEdit={() => goTo(2)}
+                />
+                <ReviewRow
+                  label="Data da mudança"
+                  value={new Date(review.dataMudanca + "T00:00:00").toLocaleDateString("pt-BR")}
+                  onEdit={() => goTo(3)}
+                />
+                <ReviewRow label="Itens" value={itensResumo} onEdit={() => goTo(3)} />
+                <ReviewRow label="Serviços adicionais" value={servicosSelecionados} onEdit={() => goTo(3)} />
+              </dl>
+            )}
+            <p className="mt-4 text-sm text-muted">
+              Ao enviar, abriremos o WhatsApp com essa solicitação já preenchida para você confirmar o envio.
+            </p>
+          </div>
+
+          {errorCount > 0 && step !== 4 && (
+            <p role="alert" className="mt-4 rounded-md border border-danger/50 bg-danger/10 p-3 text-sm text-danger">
+              Verifique {errorCount === 1 ? "o campo destacado" : `os ${errorCount} campos destacados`} acima.
+            </p>
           )}
-          <p className="mt-4 text-sm text-muted">
-            Ao enviar, abriremos o WhatsApp com essa solicitação já preenchida para você confirmar o envio.
-          </p>
+
+          <StepNav step={step} onBack={handleBack} onNext={handleNext} submitting={submitting} />
         </div>
+      </form>
 
-        {errorCount > 0 && step !== 4 && (
-          <p role="alert" className="mt-4 rounded-md border border-danger/50 bg-danger/10 p-3 text-sm text-danger">
-            Verifique {errorCount === 1 ? "o campo destacado" : `os ${errorCount} campos destacados`} acima.
-          </p>
-        )}
-
-        <StepNav step={step} onBack={handleBack} onNext={handleNext} submitting={submitting} />
-      </div>
-    </form>
+      <OrderModal ref={modalRef} />
+    </>
   )
 }

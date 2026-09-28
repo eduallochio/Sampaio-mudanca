@@ -14,7 +14,11 @@ export async function generateMetadata({ params }: PageProps<"/dicas/[slug]">): 
   const { slug } = await params
   const dica = getDica(slug)
   if (!dica) return {}
-  return { title: dica.title, description: dica.description }
+  return {
+    title: dica.title,
+    description: dica.description,
+    alternates: { canonical: `/dicas/${slug}` },
+  }
 }
 
 export default async function DicaPage({ params }: PageProps<"/dicas/[slug]">) {

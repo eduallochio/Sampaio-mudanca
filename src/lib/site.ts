@@ -4,7 +4,7 @@ export const site = {
   shortName: "Sampaio Mudanças",
   url: "https://sampaiomudancas.com.br",
   description:
-    "Fretes e mudanças residenciais e comerciais em Vila Velha, Grande Vitória e para todo o Brasil. Embalagem, desmontagem, montagem e transporte seguro. Peça seu orçamento online!",
+    "Fretes e mudanças residenciais e comerciais em Vila Velha, Grande Vitória e todo o Brasil. Embalagem e transporte seguro. Peça seu orçamento online!",
   phoneDisplay: "(27) 9 9243-6270",
   whatsapp: "5527992436270",
   instagram: "sampaiofretesemudancas",

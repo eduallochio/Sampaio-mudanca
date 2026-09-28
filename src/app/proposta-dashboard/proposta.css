@@ -210,7 +210,7 @@
   padding: 24px;
   display: flex; flex-direction: column; gap: 16px;
 }
-.pd-approval h3 { margin: 0; font-size: 18px; font-weight: 600; color: var(--ink); }
+.pd-approval h2 { margin: 0; font-size: 18px; font-weight: 600; color: var(--ink); }
 .pd-approval p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
 .pd-sign-row { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 4px; }
 @media (min-width: 560px) { .pd-sign-row { grid-template-columns: 1fr 1fr; } }

@@ -1,7 +1,10 @@
 import type { Metadata } from "next"
 import { LegalPage } from "@/components/site/legal-page"
 
-export const metadata: Metadata = { title: "Política de Privacidade" }
+export const metadata: Metadata = {
+  title: "Política de Privacidade",
+  alternates: { canonical: "/politica-de-privacidade" },
+}
 
 const sections = [
   { id: "coleta", title: "1. Coleta de Informações" },

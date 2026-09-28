@@ -374,7 +374,7 @@ export default function PropostaDashboardPage() {
           <div className="pd-invest-card">
             <div className="pd-invest-total">
               <span className="label">Pacote fechado · fases 1 a 7</span>
-              <span className="amount tabular">R$ 5.000</span>
+              <span className="amount tabular">R$ 6.500</span>
             </div>
 
             <div className="pd-split-row">
@@ -383,14 +383,14 @@ export default function PropostaDashboardPage() {
                   <div className="name">Entrada</div>
                   <div className="when">Para iniciar o projeto</div>
                 </div>
-                <div className="val tabular">R$ 2.500</div>
+                <div className="val tabular">R$ 3.250</div>
               </div>
               <div className="pd-split-item">
                 <div>
                   <div className="name">Entrega final</div>
                   <div className="when">Na aprovação do dashboard em produção</div>
                 </div>
-                <div className="val tabular">R$ 2.500</div>
+                <div className="val tabular">R$ 3.250</div>
               </div>
             </div>
 

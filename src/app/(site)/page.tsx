@@ -100,8 +100,20 @@ const faq = [
     a: "Nosso serviço padrão não inclui a instalação de eletrodomésticos (como TVs em painéis e máquinas de lavar), instalação de cortinas, prateleiras ou a organização de itens pessoais dentro de armários. O foco é no transporte e montagem da estrutura principal da sua casa.",
   },
   {
-    q: "Como é calculado o valor da mudança?",
-    a: "O valor é baseado principalmente no tempo estimado para a execução de todo o serviço (embalagem, carga, transporte, descarga e montagem). Quantidade de itens, distância entre os endereços e acesso por escadas ou elevador influenciam no tempo total. Veja como funciona o pagamento em \"Valores e Pagamento\", logo acima.",
+    q: "Preciso estar em casa no dia da mudança?",
+    a: "Sim, é importante que você ou alguém de confiança esteja presente para acompanhar a equipe, indicar como deseja embalar os itens e conferir a carga antes da saída.",
+  },
+  {
+    q: "E se algum item quebrar ou for danificado?",
+    a: "Nossa equipe é treinada para embalar e transportar com cuidado. Itens embalados por nós têm cobertura em caso de dano durante o transporte; recomendamos registrar fotos antes da mudança e comunicar qualquer avaria assim que perceber.",
+  },
+  {
+    q: "Vocês atendem aos finais de semana e feriados?",
+    a: "Sim, atendemos sábados, domingos e feriados. Como a procura é maior nesses dias, o agendamento antecipado é ainda mais importante para garantir sua data.",
+  },
+  {
+    q: "Posso remarcar ou cancelar minha mudança?",
+    a: "Sim, entre em contato conosco com antecedência para remarcar sua data sem custo adicional. Em caso de cancelamento, consulte as condições sobre o sinal já pago.",
   },
 ]
 
@@ -343,6 +355,18 @@ export default function Home() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal index={faq.length} className="mx-auto mt-6 flex max-w-3xl flex-col items-center justify-center gap-3 text-center sm:flex-row">
+          <p className="text-sm text-muted">Não encontrou sua resposta?</p>
+          <a
+            href={whatsappUrl("Olá! Tenho uma dúvida sobre a mudança.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-sm font-semibold text-brand-400 hover:underline"
+          >
+            <WhatsAppIcon className="size-4" /> Fale conosco pelo WhatsApp
+          </a>
+        </Reveal>
       </Section>
 
       <Section id="depoimentos">

@@ -30,8 +30,8 @@ export default async function DicaPage({ params }: PageProps<"/dicas/[slug]">) {
         <ArrowLeft className="size-4" /> Ver outras dicas
       </Link>
 
-      <div className="relative mb-6 aspect-[16/9] overflow-hidden rounded-xl">
-        <Image src={dica.image} alt={dica.imageAlt} fill sizes="(min-width: 768px) 768px, 100vw" className="object-cover" placeholder="blur" priority />
+      <div className="relative mb-6 aspect-[16/9] overflow-hidden rounded-xl bg-white">
+        <Image src={dica.image} alt={dica.imageAlt} fill sizes="(min-width: 768px) 768px, 100vw" className="object-contain p-6" priority />
       </div>
 
       <div className="mb-4 flex items-center gap-2 text-sm text-muted">
@@ -63,8 +63,8 @@ export default async function DicaPage({ params }: PageProps<"/dicas/[slug]">) {
                 href={`/dicas/${d.slug}`}
                 className="group flex items-center gap-4 rounded-xl border border-border bg-surface p-4 transition hover:border-brand-400/60"
               >
-                <div className="relative size-16 shrink-0 overflow-hidden rounded-lg">
-                  <Image src={d.image} alt="" fill sizes="64px" className="object-cover transition-transform duration-300 group-hover:scale-110" />
+                <div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-white">
+                  <Image src={d.image} alt="" fill sizes="64px" className="object-contain p-1.5 transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <span className="font-medium text-foreground group-hover:text-brand-400">{d.title}</span>
               </Link>

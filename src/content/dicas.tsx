@@ -1,8 +1,8 @@
 import type { StaticImageData } from "next/image"
 import type { ReactNode } from "react"
-import checklistImg from "@/assets/dicas/checklist.jpg"
-import frageisImg from "@/assets/dicas/frageis.jpg"
-import etiquetarImg from "@/assets/dicas/etiquetar.jpg"
+import checklistImg from "@/assets/dicas/checklist.svg"
+import frageisImg from "@/assets/dicas/frageis.svg"
+import etiquetarImg from "@/assets/dicas/etiquetar.svg"
 
 export type Dica = {
   slug: string

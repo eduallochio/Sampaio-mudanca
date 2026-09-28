@@ -295,8 +295,8 @@ export default function Home() {
         <div className="grid gap-6 md:grid-cols-3">
           {dicas.map((d, i) => (
             <Reveal key={d.slug} as="article" index={i} className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-surface">
-              <div className="relative aspect-[16/9] overflow-hidden">
-                <Image src={d.image} alt={d.imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" placeholder="blur" />
+              <div className="relative aspect-[16/9] overflow-hidden bg-white">
+                <Image src={d.image} alt={d.imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <h3 className="mb-2 font-display text-lg font-semibold">{d.title}</h3>

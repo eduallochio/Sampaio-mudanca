@@ -121,332 +121,400 @@ body {
 }
 
 /*
- * Modal de confirmação de envio do orçamento: caminhão "entregando" o
- * pedido, em tela cheia (dentro de um <dialog>), acionado por OrderModal.
- * Sequência ao abrir (classe .animate no .order-modal-stage):
- *   1. a "caixa" (.order-modal-box) desliza da esquerda e some dentro do caminhão
- *   2. o caminhão (.order-modal-truck) atravessa a cena da esquerda pra direita,
- *      rodas girando e faróis acendendo
- *   3. linhas de movimento + fumaça do escapamento acompanham o trajeto
- *   4. ao final, o texto troca para "Pedido enviado" com um check
- * O componente chama onDone() ao terminar (~2.6s), quando o QuoteForm abre
- * o WhatsApp — a pessoa vê a confirmação visual antes da troca de aba.
+ * Modal de confirmação de envio: reprodução fiel do clássico "Order Button"
+ * (Aaron Iker, https://codepen.io/aaroniker/pen/YzeMdMd), com as cores
+ * trocadas pro verde do WhatsApp e o botão escalado num cartão maior dentro
+ * de um <dialog> (ver OrderModal). Duração total: 10s como no original,
+ * texto de sucesso aparece aos 7.3s — ver --order-duration/--order-success-at.
  */
-.order-modal-scene {
-  --order-modal-primary: var(--whatsapp, #25d366);
-  --order-modal-primary-light: #6fe3a0;
-  --order-modal-dark: #0b3d1e;
-  --order-modal-grey-light: #cfe8db;
-  --order-modal-white: #fff;
-  background: linear-gradient(160deg, var(--order-modal-dark), #123d24 65%, var(--order-modal-dark));
+.order-modal-card {
+  /* 1x em telas bem pequenas (evita estourar a largura), até 1.7x em telas maiores */
+  --order-scale: clamp(1, calc(22vw / 26), 1.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border-radius: 24px;
+  background: var(--order-dark, #0b3d1e);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  max-width: min(90vw, 480px);
+  overflow: hidden;
 }
 
-.order-modal-cloud {
-  position: absolute;
-  height: 16px;
-  width: 60px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-}
-.order-modal-cloud-1 {
-  top: 20%;
-  left: 15%;
-}
-.order-modal-cloud-2 {
-  top: 32%;
-  right: 12%;
-  width: 40px;
-  height: 12px;
-}
+.order {
+  --primary: var(--whatsapp, #25d366);
+  --primary-light: #6fe3a0;
+  --dark: #0b3d1e;
+  --grey-dark: #1f2a24;
+  --grey: #3a4a40;
+  --grey-light: #cfe8db;
+  --white: #fff;
+  --green: #6fe3a0;
+  --sand: #cfe8db;
+  --sand-light: #eaf6ef;
 
-.order-modal-stage {
+  appearance: none;
+  border: 0;
+  background: var(--dark);
   position: relative;
-  width: 100%;
-  height: 70px;
-  margin-top: -10px;
+  height: 63px;
+  width: 260px;
+  padding: 0;
+  outline: none;
+  cursor: default;
+  border-radius: 32px;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  transform: scale(var(--order-scale));
+  font-family: var(--font-poppins, inherit);
 }
 
-.order-modal-road {
+.order span {
   position: absolute;
+  top: 19px;
   left: 0;
   right: 0;
-  bottom: 0;
-  height: 3px;
-  border-radius: 2px;
-  background: repeating-linear-gradient(
-    to right,
-    var(--order-modal-grey-light) 0 14px,
-    transparent 14px 26px
-  );
-  opacity: 0.4;
-}
-
-/* Caixa carregada: sai da esquerda e some dentro do caminhão */
-.order-modal-box {
-  position: absolute;
-  z-index: 1;
-  bottom: 3px;
-  left: -10%;
-  width: 22px;
-  height: 26px;
-  border-radius: 2px;
-  background: linear-gradient(var(--order-modal-white), var(--order-modal-grey-light));
-  opacity: 0;
-}
-.order-modal-stage.animate .order-modal-box {
-  opacity: 1;
-  animation: order-modal-box-move 0.9s ease-in 0.2s forwards;
-}
-@keyframes order-modal-box-move {
-  0% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  85% {
-    opacity: 1;
-    transform: translateX(78px);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(84px);
-  }
-}
-
-/* Caminhão: atravessa a cena inteira */
-.order-modal-truck {
-  position: absolute;
-  z-index: 2;
-  bottom: 0;
-  left: -70px;
-  width: 70px;
-  height: 48px;
-  transform: translateX(0);
-}
-.order-modal-stage.animate .order-modal-truck {
-  animation: order-modal-truck-move 2s cubic-bezier(0.45, 0, 0.4, 1) 0.55s forwards;
-}
-@keyframes order-modal-truck-move {
-  to {
-    /* atravessa a largura total da cena (mesma largura do .order-modal-scene) + a própria largura do caminhão */
-    transform: translateX(calc(min(90vw, 420px) + 70px));
-  }
-}
-
-.order-modal-truck-back {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 70px;
-  height: 48px;
-  background: var(--order-modal-white);
-  border-radius: 3px;
-}
-.order-modal-truck-front {
-  position: absolute;
-  left: 70px;
-  top: 0;
-  width: 30px;
-  height: 48px;
-  overflow: hidden;
-  background: var(--order-modal-primary);
-  border-radius: 3px 10px 10px 3px;
-}
-.order-modal-truck-window {
-  position: absolute;
-  left: 3px;
-  top: 15px;
-  width: 22px;
-  height: 17px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 1px;
-}
-.order-modal-truck-light {
-  position: absolute;
-  left: 100px;
-  width: 2px;
-  height: 6px;
-  background: var(--order-modal-grey-light);
-  border-radius: 1px;
-  opacity: 0.5;
-}
-.order-modal-truck-light--top {
-  top: 5px;
-}
-.order-modal-truck-light--bottom {
-  bottom: 5px;
-}
-.order-modal-stage.animate .order-modal-truck-light {
-  background: var(--order-modal-primary-light);
-  box-shadow: 0 0 8px 2px var(--order-modal-primary-light);
-  opacity: 1;
-  transition: opacity 0.2s ease 0.6s;
-}
-
-.order-modal-wheel {
-  position: absolute;
-  bottom: -3px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #222;
-  border: 2px solid #555;
-}
-.order-modal-wheel--back {
-  left: 12px;
-}
-.order-modal-wheel--front {
-  left: 55px;
-}
-.order-modal-stage.animate .order-modal-wheel {
-  animation: order-modal-wheel-spin 0.4s linear 0.55s infinite;
-}
-@keyframes order-modal-wheel-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Fumaça do escapamento */
-.order-modal-smoke {
-  position: absolute;
-  z-index: 1;
-  bottom: 10px;
-  left: -74px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
-  opacity: 0;
-}
-/*
- * Cada "puff" de fumaça roda 2 animações ao mesmo tempo: acompanha o
- * caminhão (mesmo delay/duração para todos, 0.55s) e pulsa (puff), com um
- * delay diferente por bolha para dar o efeito de rastro saindo em sequência.
- */
-.order-modal-stage.animate .order-modal-smoke-1 {
-  animation:
-    order-modal-truck-move 2s cubic-bezier(0.45, 0, 0.4, 1) 0.55s forwards,
-    order-modal-smoke-puff 0.7s ease-out 0.55s infinite;
-}
-.order-modal-stage.animate .order-modal-smoke-2 {
-  animation:
-    order-modal-truck-move 2s cubic-bezier(0.45, 0, 0.4, 1) 0.55s forwards,
-    order-modal-smoke-puff 0.7s ease-out 0.85s infinite;
-}
-.order-modal-stage.animate .order-modal-smoke-3 {
-  animation:
-    order-modal-truck-move 2s cubic-bezier(0.45, 0, 0.4, 1) 0.55s forwards,
-    order-modal-smoke-puff 0.7s ease-out 1.15s infinite;
-}
-@keyframes order-modal-smoke-puff {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.5);
-  }
-  20% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-10px, -16px) scale(1.4);
-  }
-}
-
-/* Linhas de movimento atrás do caminhão */
-.order-modal-lines {
-  position: absolute;
-  z-index: 1;
-  bottom: 20px;
-  left: -90px;
-  height: 3px;
-  width: 8px;
-  border-radius: 2px;
-  background: var(--order-modal-white);
-  opacity: 0;
-  box-shadow:
-    18px 0 0 var(--order-modal-white),
-    36px 0 0 var(--order-modal-white),
-    54px 0 0 var(--order-modal-white);
-}
-.order-modal-stage.animate .order-modal-lines {
-  opacity: 0.35;
-  animation: order-modal-truck-move 2s cubic-bezier(0.45, 0, 0.4, 1) 0.55s forwards;
-}
-
-.order-modal-status {
-  position: relative;
-  margin-top: 18px;
   text-align: center;
-  font-family: var(--font-poppins, inherit);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--order-modal-white, #fff);
-  min-height: 22px;
-}
-.order-modal-status-text {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  line-height: 24px;
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 500;
+  opacity: var(--o, 1);
   transition: opacity 0.3s ease;
 }
-.order-modal-status-text--sending {
-  opacity: 0.85;
+.order span.default {
+  --o: 1;
+  transition-delay: 0.3s;
 }
-.order-modal-status-text--done {
-  display: none;
+.order span.success {
+  --o: 0;
+  transition-delay: 0s;
 }
-.order-modal-stage.animate ~ .order-modal-status .order-modal-status-text--sending {
-  animation: order-modal-fade-out 0.3s ease 2.3s forwards;
-}
-.order-modal-stage.animate ~ .order-modal-status .order-modal-status-text--done {
-  display: inline-flex;
-  opacity: 0;
-  animation: order-modal-fade-in 0.3s ease 2.3s forwards;
-}
-@keyframes order-modal-fade-out {
-  to {
-    opacity: 0;
-    display: none;
-  }
-}
-@keyframes order-modal-fade-in {
-  to {
-    opacity: 1;
-  }
-}
-
-.order-modal-check {
-  width: 13px;
-  height: 11px;
+.order span.success svg {
+  width: 12px;
+  height: 10px;
+  display: inline-block;
+  vertical-align: top;
   fill: none;
-  stroke: var(--order-modal-primary-light, #6fe3a0);
+  margin: 7px 0 0 4px;
+  stroke: var(--green);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-dasharray: 16px;
+  stroke-dashoffset: var(--offset, 16px);
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.order .lines {
+  opacity: 0;
+  position: absolute;
+  height: 3px;
+  background: var(--white);
+  border-radius: 2px;
+  width: 6px;
+  top: 30px;
+  left: 100%;
+  box-shadow:
+    15px 0 0 var(--white),
+    30px 0 0 var(--white),
+    45px 0 0 var(--white),
+    60px 0 0 var(--white),
+    75px 0 0 var(--white),
+    90px 0 0 var(--white),
+    105px 0 0 var(--white),
+    120px 0 0 var(--white),
+    135px 0 0 var(--white),
+    150px 0 0 var(--white),
+    165px 0 0 var(--white),
+    180px 0 0 var(--white),
+    195px 0 0 var(--white),
+    210px 0 0 var(--white),
+    225px 0 0 var(--white),
+    240px 0 0 var(--white),
+    255px 0 0 var(--white),
+    270px 0 0 var(--white),
+    285px 0 0 var(--white),
+    300px 0 0 var(--white);
+}
+
+.order .back,
+.order .box {
+  --start: var(--white);
+  --stop: var(--grey-light);
+  border-radius: 2px;
+  background: linear-gradient(var(--start), var(--stop));
+  position: absolute;
+}
+
+.order .truck {
+  width: 60px;
+  height: 42px;
+  left: 100%;
+  z-index: 1;
+  top: 11px;
+  position: absolute;
+  transform: translateX(24px);
+}
+.order .truck::before,
+.order .truck::after {
+  --r: -90deg;
+  content: "";
+  height: 2px;
+  width: 20px;
+  right: 58px;
+  position: absolute;
+  display: block;
+  background: var(--white);
+  border-radius: 1px;
+  transform-origin: 100% 50%;
+  transform: rotate(var(--r));
+}
+.order .truck::before {
+  top: 4px;
+}
+.order .truck::after {
+  bottom: 4px;
+}
+
+.order .truck .back {
+  left: 0;
+  top: 0;
+  width: 60px;
+  height: 42px;
+  z-index: 1;
+}
+
+.order .truck .front {
+  overflow: hidden;
+  position: absolute;
+  border-radius: 2px 9px 9px 2px;
+  width: 26px;
+  height: 42px;
+  left: 60px;
+}
+.order .truck .front::before,
+.order .truck .front::after {
+  content: "";
+  position: absolute;
+  display: block;
+}
+.order .truck .front::before {
+  height: 32px;
+  width: 2px;
+  left: 0;
+  top: 5px;
+  background: linear-gradient(var(--grey), var(--grey-dark));
+}
+.order .truck .front::after {
+  border-radius: 2px 9px 9px 2px;
+  background: var(--primary);
+  width: 24px;
+  height: 42px;
+  left: 2px;
+  top: 0;
+}
+
+.order .truck .front .window {
+  overflow: hidden;
+  border-radius: 2px 8px 8px 2px;
+  background: var(--primary-light);
+  transform: perspective(4px) rotateY(3deg);
+  width: 22px;
+  height: 42px;
+  position: absolute;
+  left: 2px;
+  top: 0;
+  z-index: 1;
+  transform-origin: 0 50%;
+}
+.order .truck .front .window::before,
+.order .truck .front .window::after {
+  content: "";
+  position: absolute;
+  right: 0;
+}
+.order .truck .front .window::before {
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.order .truck .front .window::after {
+  width: 14px;
+  top: 7px;
+  height: 4px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 7px 0 rgba(255, 255, 255, 0.25);
+}
+
+.order .truck .light {
+  width: 3px;
+  height: 6px;
+  left: 83px;
+  position: absolute;
+  border-radius: 1px;
+  transform: scaleX(0);
+  background: var(--primary-light);
+}
+.order .truck .light.top {
+  top: 4px;
+}
+.order .truck .light.bottom {
+  bottom: 4px;
+}
+
+.order .box {
+  --start: var(--sand);
+  --stop: var(--sand-light);
+  width: 21px;
+  height: 21px;
+  right: 100%;
+  top: 21px;
+}
+.order .box::before,
+.order .box::after {
+  content: "";
+  top: 10px;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.order .box::before {
+  height: 2px;
+  margin-top: -1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.order .box::after {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* --- Sequência da animação (10s), disparada pela classe .animate --- */
+.order.animate .default {
+  --o: 0;
+  transition-delay: 0s;
+}
+.order.animate .success {
+  --o: 1;
+  --offset: 0;
+  transition-delay: 7.3s;
+}
+.order.animate .truck {
+  animation: order-truck 10s ease forwards;
+}
+.order.animate .truck::before {
+  animation: order-door1 2.4s ease forwards 0.3s;
+}
+.order.animate .truck::after {
+  animation: order-door2 2.4s ease forwards 0.3s;
+}
+.order.animate .truck .light {
+  animation: order-light 10s ease forwards;
+}
+.order.animate .box {
+  animation: order-box 10s ease forwards;
+}
+.order.animate .lines {
+  animation: order-lines 10s ease forwards;
+}
+
+@keyframes order-truck {
+  10%,
+  30% {
+    transform: translateX(-164px);
+  }
+  40% {
+    transform: translateX(-104px);
+  }
+  60% {
+    transform: translateX(-224px);
+  }
+  75%,
+  100% {
+    transform: translateX(24px);
+  }
+}
+
+@keyframes order-lines {
+  0%,
+  30% {
+    opacity: 0;
+    transform: scaleX(0.7) translateX(0);
+  }
+  35%,
+  65% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(0.7) translateX(-400px);
+  }
+}
+
+@keyframes order-light {
+  0%,
+  30% {
+    opacity: 0;
+    transform: scaleX(0.8);
+  }
+  40%,
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes order-door1 {
+  30%,
+  50% {
+    transform: rotate(32deg);
+  }
+}
+@keyframes order-door2 {
+  30%,
+  50% {
+    transform: rotate(-32deg);
+  }
+}
+
+@keyframes order-box {
+  8%,
+  10% {
+    transform: translateX(40px);
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(112px);
+    opacity: 1;
+  }
+  26%,
+  100% {
+    transform: translateX(112px);
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .order-modal-box,
-  .order-modal-truck,
-  .order-modal-wheel,
-  .order-modal-smoke,
-  .order-modal-lines,
-  .order-modal-status-text {
+  .order .truck,
+  .order .truck::before,
+  .order .truck::after,
+  .order .truck .light,
+  .order .box,
+  .order .lines,
+  .order span {
     animation: none !important;
     transition: none !important;
   }
-  .order-modal-stage.animate .order-modal-box,
-  .order-modal-stage.animate .order-modal-lines,
-  .order-modal-stage.animate .order-modal-smoke {
-    opacity: 0;
+  .order.animate .default {
+    --o: 0;
   }
-  .order-modal-stage.animate ~ .order-modal-status .order-modal-status-text--sending {
-    display: none;
-  }
-  .order-modal-stage.animate ~ .order-modal-status .order-modal-status-text--done {
-    display: inline-flex;
-    opacity: 1;
+  .order.animate .success {
+    --o: 1;
+    --offset: 0;
   }
 }
 

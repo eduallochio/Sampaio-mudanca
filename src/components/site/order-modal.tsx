@@ -3,18 +3,21 @@
 import { useEffect, useImperativeHandle, useRef, useState, forwardRef } from "react"
 
 export type OrderModalHandle = {
-  /** Abre o modal, roda a animação e chama onDone() quando terminar (~2.6s). */
+  /** Abre o modal, roda a animação e chama onDone() quando terminar. */
   play: (onDone: () => void) => void
 }
 
-const ANIMATION_MS = 2600
+// A animação CSS dura 10s (fiel ao original); o texto "Pedido enviado" some
+// aos 7.3s, então fechamos o modal logo depois de dar tempo da pessoa ler.
+const ANIMATION_MS = 8600
 
 /**
- * Modal de confirmação de envio: cobre a tela com um caminhão "entregando"
- * o pedido (a caixa entra no caminhão, ele atravessa a cena, termina em
- * "Pedido enviado" com um check). Fecha sozinho ao final e avisa o chamador
- * via onDone, que é quando o QuoteForm efetivamente abre o WhatsApp — assim
- * a pessoa vê a confirmação visual antes da troca de aba.
+ * Modal de confirmação de envio: cobre a tela com a animação original do
+ * "Order Button" (caminhão saindo, parando em 3 pontos da rota, portas
+ * abrindo, luzes acendendo, caixa sendo carregada, linhas de movimento),
+ * escalada para um cartão maior e centralizado. Fecha sozinho ao final e
+ * avisa o chamador via onDone — que é quando o QuoteForm efetivamente abre
+ * o WhatsApp, para a pessoa ver a confirmação visual antes da troca de aba.
  */
 export const OrderModal = forwardRef<OrderModalHandle>(function OrderModal(_props, ref) {
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -46,44 +49,29 @@ export const OrderModal = forwardRef<OrderModalHandle>(function OrderModal(_prop
   return (
     <dialog
       ref={dialogRef}
-      className="m-auto rounded-2xl border-0 bg-transparent p-0 backdrop:bg-black/70"
+      className="m-auto rounded-3xl border-0 bg-transparent p-0 backdrop:bg-black/70"
       aria-label="Enviando sua solicitação"
     >
-      <div className="order-modal-scene relative flex h-[220px] w-[min(90vw,420px)] flex-col items-center justify-center overflow-hidden rounded-2xl">
-        <div className="order-modal-cloud order-modal-cloud-1" aria-hidden="true" />
-        <div className="order-modal-cloud order-modal-cloud-2" aria-hidden="true" />
-
-        <div className={`order-modal-stage ${animating ? "animate" : ""}`}>
-          <div className="order-modal-road" />
-
-          <div className="order-modal-box" />
-
-          <div className="order-modal-truck">
-            <div className="order-modal-truck-back" />
-            <div className="order-modal-truck-front">
-              <div className="order-modal-truck-window" />
-            </div>
-            <div className="order-modal-truck-light order-modal-truck-light--top" />
-            <div className="order-modal-truck-light order-modal-truck-light--bottom" />
-            <div className="order-modal-wheel order-modal-wheel--back" />
-            <div className="order-modal-wheel order-modal-wheel--front" />
-          </div>
-
-          <div className="order-modal-lines" />
-          <div className="order-modal-smoke order-modal-smoke-1" />
-          <div className="order-modal-smoke order-modal-smoke-2" />
-          <div className="order-modal-smoke order-modal-smoke-3" />
-        </div>
-
-        <p className="order-modal-status">
-          <span className="order-modal-status-text order-modal-status-text--sending">Enviando sua solicitação…</span>
-          <span className="order-modal-status-text order-modal-status-text--done">
+      <div className="order-modal-card">
+        <div className={`order ${animating ? "animate" : ""}`}>
+          <span className="default">Enviando sua solicitação</span>
+          <span className="success">
             Pedido enviado
-            <svg viewBox="0 0 12 10" className="order-modal-check">
+            <svg viewBox="0 0 12 10">
               <polyline points="1.5 6 4.5 9 10.5 1" />
             </svg>
           </span>
-        </p>
+          <div className="box" />
+          <div className="truck">
+            <div className="back" />
+            <div className="front">
+              <div className="window" />
+            </div>
+            <div className="light top" />
+            <div className="light bottom" />
+          </div>
+          <div className="lines" />
+        </div>
       </div>
     </dialog>
   )

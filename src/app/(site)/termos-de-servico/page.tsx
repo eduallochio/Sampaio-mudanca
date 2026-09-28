@@ -1,7 +1,10 @@
 import type { Metadata } from "next"
 import { LegalPage } from "@/components/site/legal-page"
 
-export const metadata: Metadata = { title: "Termos de Serviço" }
+export const metadata: Metadata = {
+  title: "Termos de Serviço",
+  alternates: { canonical: "/termos-de-servico" },
+}
 
 const sections = [
   { id: "aceitacao", title: "1. Aceitação dos Termos" },

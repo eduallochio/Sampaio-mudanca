@@ -16,7 +16,20 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Proposta — Dashboard Sampaio",
+  description:
+    "Proposta comercial do dashboard financeiro e operacional da Sampaio Fretes e Mudanças: escopo, cronograma, telas de exemplo e investimento.",
   robots: { index: false, follow: false },
+  alternates: { canonical: "/proposta-dashboard" },
+  openGraph: {
+    title: "Proposta — Dashboard Sampaio",
+    description: "Escopo, cronograma e investimento do dashboard financeiro e operacional da Sampaio Fretes e Mudanças.",
+    images: [],
+  },
+  twitter: {
+    card: "summary",
+    title: "Proposta — Dashboard Sampaio",
+    description: "Escopo, cronograma e investimento do dashboard financeiro e operacional da Sampaio Fretes e Mudanças.",
+  },
 }
 
 const contexto = [
@@ -240,7 +253,7 @@ export default function PropostaDashboardPage() {
                   </svg>
                 </div>
                 <div>
-                  <h4>{c.title}</h4>
+                  <h3>{c.title}</h3>
                   <p>{c.text}</p>
                 </div>
               </div>
@@ -264,7 +277,7 @@ export default function PropostaDashboardPage() {
               <div className="pd-module" key={m.num}>
                 <div className="pd-module-num">{m.num}</div>
                 <div className="pd-module-body">
-                  <h4>{m.title}</h4>
+                  <h3>{m.title}</h3>
                   <p>{m.text}</p>
                   <div className="pd-module-tags">
                     {m.tags.map((t) => (
@@ -316,7 +329,7 @@ export default function PropostaDashboardPage() {
                   <span className="mobile-lbl">Celular</span>
                 </div>
                 <div className="pd-preview-caption">
-                  <h4>{t.label === "Agenda" ? "Agenda de mudanças" : t.label}</h4>
+                  <h3>{t.label === "Agenda" ? "Agenda de mudanças" : t.label}</h3>
                   <p>{t.caption}</p>
                 </div>
               </div>
@@ -343,7 +356,7 @@ export default function PropostaDashboardPage() {
                   </div>
                   <div className="pd-tl-content">
                     <span className="wk">{c.wk}</span>
-                    <h4>{c.title}</h4>
+                    <h3>{c.title}</h3>
                     <p>{c.text}</p>
                   </div>
                 </div>
@@ -361,7 +374,7 @@ export default function PropostaDashboardPage() {
           <div className="pd-invest-card">
             <div className="pd-invest-total">
               <span className="label">Pacote fechado · fases 1 a 7</span>
-              <span className="amount tabular">R$ 5.000</span>
+              <span className="amount tabular">R$ 6.500</span>
             </div>
 
             <div className="pd-split-row">
@@ -370,14 +383,14 @@ export default function PropostaDashboardPage() {
                   <div className="name">Entrada</div>
                   <div className="when">Para iniciar o projeto</div>
                 </div>
-                <div className="val tabular">R$ 2.500</div>
+                <div className="val tabular">R$ 3.250</div>
               </div>
               <div className="pd-split-item">
                 <div>
                   <div className="name">Entrega final</div>
                   <div className="when">Na aprovação do dashboard em produção</div>
                 </div>
-                <div className="val tabular">R$ 2.500</div>
+                <div className="val tabular">R$ 3.250</div>
               </div>
             </div>
 
@@ -404,7 +417,7 @@ export default function PropostaDashboardPage() {
         </section>
 
         <section className="pd-section pd-approval">
-          <h3>De acordo</h3>
+          <h2>De acordo</h2>
           <p>
             Esta proposta é válida por 15 dias a partir da data de envio. Para iniciar, basta a confirmação por
             WhatsApp — o registro abaixo é só para ficar guardado com os dois.

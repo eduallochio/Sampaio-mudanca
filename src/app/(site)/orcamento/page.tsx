@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Solicite seu Orçamento",
   description:
     "Peça seu orçamento de mudança residencial ou comercial em Vila Velha e Grande Vitória. Preencha o formulário e receba uma proposta pelo WhatsApp.",
+  alternates: { canonical: "/orcamento" },
 }
 
 const destaques = [

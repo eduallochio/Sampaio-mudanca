@@ -120,6 +120,257 @@ body {
   }
 }
 
+/*
+ * Botão "Enviar pelo WhatsApp" com animação de caminhão entregando.
+ * Adaptado do clássico efeito "Order Button" (CSS/JS) para as cores do site
+ * (verde do WhatsApp) e para o fluxo de envio do formulário de orçamento.
+ * Sequência ao clicar (classe .animate, removida após 3s):
+ *   1. o botão encolhe até virar um retângulo estreito
+ *   2. uma "caixa" (.order-btn-box) desliza da esquerda até sumir dentro do caminhão
+ *   3. o caminhão (.order-btn-truck) desliza da direita pro centro, rodas/faróis acendem
+ *   4. linhas de movimento (.order-btn-lines) percorrem a pista atrás do caminhão
+ *   5. o texto troca de "label" pro "success", com o check desenhando via stroke-dashoffset
+ */
+.order-btn {
+  --order-btn-primary: var(--whatsapp, #25d366);
+  --order-btn-primary-light: #6fe3a0;
+  --order-btn-dark: #0b3d1e;
+  --order-btn-grey-dark: #1f2a24;
+  --order-btn-grey: #3a4a40;
+  --order-btn-grey-light: #7c9086;
+  --order-btn-white: #fff;
+  --order-btn-check: 0;
+
+  appearance: none;
+  border: 0;
+  background: var(--order-btn-dark);
+  position: relative;
+  height: 52px;
+  width: 100%;
+  max-width: 320px;
+  padding: 0;
+  outline: none;
+  cursor: pointer;
+  border-radius: 26px;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  font-family: var(--font-poppins, inherit);
+}
+.order-btn:active:not(.animate) {
+  transform: scale(0.96);
+}
+.order-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.order-btn-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  text-align: center;
+  line-height: 52px;
+  color: var(--order-btn-white);
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.3s ease;
+}
+.order-btn-label--default {
+  opacity: 1;
+}
+.order-btn-label--success {
+  opacity: 0;
+  transition-delay: 0.3s;
+}
+.order-btn.animate .order-btn-label--default {
+  opacity: 0;
+  transition-delay: 0s;
+}
+.order-btn.animate .order-btn-label--success {
+  --order-btn-check: 16px;
+  opacity: 1;
+}
+
+.order-btn-check {
+  width: 12px;
+  height: 10px;
+  display: inline-block;
+  vertical-align: top;
+  fill: none;
+  margin: 7px 0 0 4px;
+  stroke: var(--order-btn-primary-light);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 16px;
+  stroke-dashoffset: var(--order-btn-check);
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+/* "Caixa" que desliza pra dentro do caminhão */
+.order-btn-box {
+  --start: var(--order-btn-white);
+  --stop: var(--order-btn-grey-light);
+  position: absolute;
+  z-index: 1;
+  top: 11px;
+  left: 20px;
+  width: 26px;
+  height: 30px;
+  border-radius: 2px;
+  background: linear-gradient(var(--start), var(--stop));
+  opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s ease;
+}
+.order-btn.animate .order-btn-box {
+  opacity: 1;
+  animation: order-btn-box-move 1.4s ease-in-out 0.2s forwards;
+}
+@keyframes order-btn-box-move {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(120px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(130px);
+  }
+}
+
+/* Caminhão */
+.order-btn-truck {
+  position: absolute;
+  z-index: 2;
+  top: 11px;
+  left: 100%;
+  width: 60px;
+  height: 41px;
+  transform: translateX(24px);
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: 0s;
+}
+.order-btn.animate .order-btn-truck {
+  transform: translateX(calc(-100% - 24px + 60px));
+  transition-delay: 1.3s;
+}
+
+.order-btn-truck-back {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 60px;
+  height: 41px;
+  background: var(--order-btn-white);
+  border-radius: 2px;
+}
+
+.order-btn-truck-front {
+  position: absolute;
+  left: 60px;
+  top: 0;
+  width: 26px;
+  height: 41px;
+  overflow: hidden;
+  background: var(--order-btn-primary);
+  border-radius: 2px 9px 9px 2px;
+}
+.order-btn-truck-window {
+  position: absolute;
+  left: 2px;
+  top: 13px;
+  width: 20px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1px;
+}
+
+.order-btn-truck-light {
+  position: absolute;
+  left: 86px;
+  width: 2px;
+  height: 5px;
+  background: var(--order-btn-grey-light);
+  border-radius: 1px;
+  transition: background 0.2s ease;
+}
+.order-btn-truck-light--top {
+  top: 4px;
+}
+.order-btn-truck-light--bottom {
+  bottom: 4px;
+}
+.order-btn.animate .order-btn-truck-light {
+  background: var(--order-btn-primary-light);
+  box-shadow: 0 0 6px 1px var(--order-btn-primary-light);
+}
+
+/* Linhas de movimento atrás do caminhão */
+.order-btn-lines {
+  position: absolute;
+  z-index: 1;
+  height: 3px;
+  width: 6px;
+  top: 30px;
+  left: 100%;
+  border-radius: 2px;
+  background: var(--order-btn-white);
+  opacity: 0;
+  box-shadow:
+    15px 0 0 var(--order-btn-white),
+    30px 0 0 var(--order-btn-white),
+    45px 0 0 var(--order-btn-white),
+    60px 0 0 var(--order-btn-white),
+    75px 0 0 var(--order-btn-white),
+    90px 0 0 var(--order-btn-white);
+  transition: opacity 0.2s ease;
+}
+.order-btn.animate .order-btn-lines {
+  opacity: 0.5;
+  animation: order-btn-lines-move 0.4s linear 1.4s infinite;
+}
+@keyframes order-btn-lines-move {
+  to {
+    transform: translateX(-15px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .order-btn,
+  .order-btn-label,
+  .order-btn-check,
+  .order-btn-box,
+  .order-btn-truck,
+  .order-btn-truck-light,
+  .order-btn-lines {
+    animation: none !important;
+    transition: none !important;
+  }
+  .order-btn.animate .order-btn-label--default {
+    opacity: 0;
+  }
+  .order-btn.animate .order-btn-label--success {
+    opacity: 1;
+    --order-btn-check: 16px;
+  }
+  .order-btn.animate .order-btn-box,
+  .order-btn.animate .order-btn-lines {
+    opacity: 0;
+  }
+}
+
 /* Tipografia dos artigos (dicas e páginas legais) */
 .prose-site h2 {
   font-family: var(--font-poppins);

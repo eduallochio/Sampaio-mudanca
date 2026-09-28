@@ -16,7 +16,7 @@ import {
   type Orcamento,
 } from "@/lib/orcamento"
 import { whatsappUrl } from "@/lib/site"
-import { WhatsAppIcon } from "./brand-icons"
+import { OrderButton } from "./order-button"
 
 type Errors = Record<string, string>
 
@@ -212,15 +212,14 @@ function StepNav({
         <span />
       )}
       {isLast ? (
-        <button
+        <OrderButton
           key="enviar"
           type="submit"
           data-action="enviar"
           disabled={submitting}
-          className="flex items-center gap-2 rounded-lg bg-whatsapp px-6 py-3 font-display font-semibold text-[#0b3d1e] transition hover:brightness-110 disabled:opacity-60"
-        >
-          <WhatsAppIcon className="size-5" /> Enviar pelo WhatsApp
-        </button>
+          label="Enviar pelo WhatsApp"
+          successLabel="Enviado"
+        />
       ) : (
         <button
           key="continuar"

@@ -152,7 +152,6 @@ body {
   outline: none;
   cursor: pointer;
   border-radius: 26px;
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
   -webkit-tap-highlight-color: transparent;
   overflow: hidden;
   transition: transform 0.3s ease;

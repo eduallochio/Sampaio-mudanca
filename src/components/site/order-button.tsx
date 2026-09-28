@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, type ButtonHTMLAttributes } from "react"
+import { useEffect, useRef, useState, type ButtonHTMLAttributes } from "react"
 
 type OrderButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & {
   /** Texto mostrado antes de enviar. */
@@ -15,31 +15,37 @@ type OrderButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"
  * que "dirige" da esquerda pra direita com faróis e linhas de movimento, e
  * termina mostrando o texto de sucesso com um check.
  *
+ * A classe "animate" fica no estado do React (não em classList.add direto no
+ * DOM): o formulário pai chama setState em onSubmit (submitting), o que
+ * re-renderiza este componente — se a classe tivesse sido adicionada fora do
+ * React, o próximo render recalcularia `className` do zero e apagaria essa
+ * classe antes da animação sequer rodar visualmente.
+ *
  * Não substitui o comportamento de submit do formulário: o <button> interno
  * continua type="submit" com o data-action original, então a lógica de
- * validação/envio do QuoteForm funciona exatamente como antes — este
- * componente só adiciona a classe "animate" por 3s ao clicar, e o resto é
- * puro CSS (ver .order-btn* em globals.css).
+ * validação/envio do QuoteForm funciona exatamente como antes.
  */
 export function OrderButton({ label, successLabel, className = "", onClick, disabled, ...props }: OrderButtonProps) {
-  const ref = useRef<HTMLButtonElement>(null)
+  const [animating, setAnimating] = useState(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null)
+
+  useEffect(() => () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+  }, [])
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
-    const button = ref.current
-    if (button && !button.classList.contains("animate")) {
-      button.classList.add("animate")
-      setTimeout(() => button.classList.remove("animate"), 3000)
-    }
+    setAnimating(true)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    timeoutRef.current = setTimeout(() => setAnimating(false), 3000)
     onClick?.(e)
   }
 
   return (
     <button
-      ref={ref}
       {...props}
       disabled={disabled}
       onClick={handleClick}
-      className={`order-btn ${className}`}
+      className={`order-btn ${animating ? "animate" : ""} ${className}`}
     >
       <span className="order-btn-label order-btn-label--default">{label}</span>
       <span className="order-btn-label order-btn-label--success">

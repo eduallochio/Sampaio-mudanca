@@ -1,5 +1,5 @@
 import Image from "next/image"
-import logo from "@/assets/logo.png"
+import logo from "@/assets/logo-transparente.png"
 
 // O logo atual é azul-marinho e perde contraste no fundo escuro,
 // por isso fica sobre um selo branco até existir uma versão negativa.

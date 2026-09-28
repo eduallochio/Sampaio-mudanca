@@ -12,6 +12,7 @@ const anchorLinks = [
   { id: "servicos", label: "Serviços" },
   { id: "sobre-nos", label: "Sobre Nós" },
   { id: "dicas", label: "Dicas" },
+  { id: "valores", label: "Valores" },
   { id: "contato", label: "Contato" },
 ] as const
 

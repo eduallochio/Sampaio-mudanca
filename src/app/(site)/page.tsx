@@ -2,19 +2,21 @@ import Image, { getImageProps } from "next/image"
 import Link from "next/link"
 import type { ReactNode } from "react"
 import {
-  BadgeCheck,
+  Banknote,
   Boxes,
   Building2,
+  Calendar,
   Camera,
   CreditCard,
+  HandCoins,
+  Hourglass,
   IdCard,
-  Info,
   MapPin,
   MessageSquareQuote,
-  PackageOpen,
   Phone,
+  QrCode,
+  Recycle,
   Truck,
-  Wallet,
   Wrench,
 } from "lucide-react"
 import bannerDesktop from "@/assets/banner.jpg"
@@ -53,15 +55,35 @@ const servicos = [
   },
 ]
 
-const incluso = [
-  "1 caminhão baú",
-  "4 profissionais no total",
-  "Transporte (frete)",
-  "Carga e descarga",
-  "Desmontagem e montagem de móveis",
-  "Embalagem da mobília com plástico bolha",
-  "Caixas de papelão e caixas-cabideiro",
-  "Fitas adesivas e tags identificadoras",
+const formasPagamento = [
+  { icon: QrCode, label: "Pix" },
+  { icon: Banknote, label: "Transferência" },
+  { icon: Banknote, label: "Dinheiro" },
+  { icon: CreditCard, label: "Cartão" },
+]
+
+const etapasPagamento = [
+  {
+    icon: HandCoins,
+    title: "Sinal",
+    text: "Equivalente a 1 hora de serviço, pago no agendamento para garantir sua data.",
+  },
+  {
+    icon: Wrench,
+    title: "Durante a mudança",
+    text: "Horas excedentes ao previsto são cobradas ao final do serviço, sem surpresas.",
+  },
+  {
+    icon: CreditCard,
+    title: "Restante",
+    text: "Pago ao término da mudança, direto com a equipe (Pix, transferência, dinheiro ou cartão).",
+  },
+]
+
+const informacoes = [
+  { icon: Calendar, text: "Iniciamos as mudanças entre 08:00 e 08:30 da manhã." },
+  { icon: Recycle, text: "Ao término, recolhemos materiais reutilizáveis (manta bolha, caixas-cabideiro)." },
+  { icon: Hourglass, text: "Recomendamos agendar com 15 dias de antecedência, especialmente em fins de semana." },
 ]
 
 const faq = [
@@ -79,7 +101,7 @@ const faq = [
   },
   {
     q: "Como é calculado o valor da mudança?",
-    a: "O valor é baseado principalmente no tempo estimado para a execução de todo o serviço (embalagem, carga, transporte, descarga e montagem). Quantidade de itens, distância entre os endereços e acesso por escadas ou elevador influenciam no tempo total.",
+    a: "O valor é baseado principalmente no tempo estimado para a execução de todo o serviço (embalagem, carga, transporte, descarga e montagem). Quantidade de itens, distância entre os endereços e acesso por escadas ou elevador influenciam no tempo total. Veja como funciona o pagamento em \"Valores e Pagamento\", logo acima.",
   },
 ]
 
@@ -267,38 +289,44 @@ export default function Home() {
         </div>
       </Section>
 
+      <Section id="valores" alt>
+        <SectionTitle
+          title="Valores e Pagamento"
+          subtitle="Orçamento sem compromisso. Veja como funciona o pagamento, do agendamento até o dia da mudança."
+        />
+        <div className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-3">
+          {etapasPagamento.map(({ icon: Icon, title, text }, i) => (
+            <Reveal key={title} index={i} className="rounded-xl border border-border bg-surface p-6">
+              <div className="mb-3 grid size-11 place-items-center rounded-full bg-brand-900 text-white">
+                <Icon className="size-5" aria-hidden="true" />
+              </div>
+              <h3 className="mb-1.5 font-display font-semibold text-foreground">{title}</h3>
+              <p className="text-sm leading-relaxed text-muted">{text}</p>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal index={3} className="mx-auto mt-6 max-w-4xl rounded-xl border border-border bg-surface p-6 text-center">
+          <p className="mb-4 text-sm font-medium text-foreground">Aceitamos</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+            {formasPagamento.map(({ icon: Icon, label }) => (
+              <span key={label} className="flex items-center gap-2 text-muted">
+                <Icon className="size-5 text-brand-400" aria-hidden="true" /> {label}
+              </span>
+            ))}
+          </div>
+        </Reveal>
+      </Section>
+
       <Section id="informacoes">
-        <SectionTitle title="Informações Importantes" />
-        <div className="grid gap-6 md:grid-cols-2">
-          <InfoCard icon={PackageOpen} title="Nossos serviços incluem" index={0}>
-            <CheckList items={incluso} />
-          </InfoCard>
-          <InfoCard icon={Wallet} title="Valores e pagamento" index={1}>
-            <CheckList
-              items={[
-                "Orçamento sem compromisso.",
-                "Agendamento mediante sinal (valor de 1 hora).",
-                "Horas excedentes são cobradas ao final do serviço.",
-              ]}
-            />
-            <h4 className="mt-6 mb-3 flex items-center gap-2 font-display font-semibold text-brand-400">
-              <CreditCard className="size-5" /> Formas de pagamento
-            </h4>
-            <CheckList
-              items={[
-                <><strong className="text-foreground">Sinal:</strong> Pix, transferência, dinheiro ou cartão (link).</>,
-                <><strong className="text-foreground">Restante:</strong> Pix, transferência, dinheiro ou cartão (maquininha).</>,
-              ]}
-            />
-          </InfoCard>
-          <InfoCard icon={Info} title="Observações gerais" index={2} className="md:col-span-2">
-            <CheckList
-              items={[
-                "Iniciamos as mudanças entre 08:00 e 08:30 da manhã.",
-                "Ao término, recolhemos materiais reutilizáveis (manta bolha, caixas-cabideiro).",
-              ]}
-            />
-          </InfoCard>
+        <SectionTitle title="Informações Importantes" subtitle="O que você precisa saber antes do dia da mudança." />
+        <div className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-3">
+          {informacoes.map(({ icon: Icon, text }, i) => (
+            <Reveal key={text} index={i} className="rounded-xl border border-border bg-surface p-6 text-center">
+              <Icon className="mx-auto mb-3 size-8 text-brand-400" aria-hidden="true" />
+              <p className="text-sm leading-relaxed text-muted">{text}</p>
+            </Reveal>
+          ))}
         </div>
       </Section>
 
@@ -371,42 +399,6 @@ export default function Home() {
         </div>
       </Section>
     </>
-  )
-}
-
-function InfoCard({
-  icon: Icon,
-  title,
-  index = 0,
-  className = "",
-  children,
-}: {
-  icon: typeof Info
-  title: string
-  index?: number
-  className?: string
-  children: ReactNode
-}) {
-  return (
-    <Reveal index={index} className={`rounded-xl border border-border bg-surface p-6 ${className}`}>
-      <h3 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold text-brand-400">
-        <Icon className="size-5" /> {title}
-      </h3>
-      {children}
-    </Reveal>
-  )
-}
-
-function CheckList({ items }: { items: ReactNode[] }) {
-  return (
-    <ul className="space-y-2">
-      {items.map((item, i) => (
-        <li key={i} className="flex gap-3 text-muted">
-          <BadgeCheck className="mt-0.5 size-5 shrink-0 text-whatsapp" aria-hidden="true" />
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
   )
 }
 

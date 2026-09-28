@@ -25,10 +25,7 @@ export function CoverageMap() {
               strokeLinejoin="round"
               className={atendido ? "map-state-highlight" : undefined}
             >
-              <title>
-                {state.name}
-                {atendido ? " — já atendido" : ""}
-              </title>
+              <title>{atendido ? `${state.name} — já atendido` : state.name}</title>
             </path>
           )
         })}

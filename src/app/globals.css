@@ -99,6 +99,112 @@ body {
   }
 }
 
+/* Animação do caminhão de mudança (seção "Conheça a Sampaio") */
+.truck-scene {
+  isolation: isolate;
+}
+
+.truck-road-line {
+  background-image: repeating-linear-gradient(to right, var(--highlight) 0 24px, transparent 24px 48px);
+  animation: truck-road-scroll 0.8s linear infinite;
+}
+@keyframes truck-road-scroll {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -48px;
+  }
+}
+
+.truck-bounce {
+  animation: truck-bounce 0.6s ease-in-out infinite;
+}
+@keyframes truck-bounce {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -3px);
+  }
+}
+
+.truck-wheel {
+  animation: truck-wheel-spin 0.5s linear infinite;
+}
+@keyframes truck-wheel-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.truck-smoke {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: truck-smoke-puff 1.8s ease-out infinite;
+}
+.truck-smoke-2 {
+  animation-delay: 0.6s;
+}
+.truck-smoke-3 {
+  animation-delay: 1.2s;
+}
+@keyframes truck-smoke-puff {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  15% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-22px, -18px) scale(1.4);
+  }
+}
+
+.truck-cloud {
+  position: absolute;
+  top: 14%;
+  height: 16px;
+  width: 60px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  animation: truck-cloud-drift linear infinite;
+}
+.truck-cloud-1 {
+  left: 100%;
+  animation-duration: 9s;
+}
+.truck-cloud-2 {
+  top: 32%;
+  left: 100%;
+  width: 40px;
+  height: 12px;
+  animation-duration: 13s;
+  animation-delay: -5s;
+}
+@keyframes truck-cloud-drift {
+  to {
+    transform: translateX(-260px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .truck-road-line,
+  .truck-bounce,
+  .truck-wheel,
+  .truck-smoke,
+  .truck-cloud {
+    animation: none;
+  }
+  .truck-smoke {
+    display: none;
+  }
+}
+
 /* Tipografia dos artigos (dicas e páginas legais) */
 .prose-site h2 {
   font-family: var(--font-poppins);

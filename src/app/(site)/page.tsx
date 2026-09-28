@@ -19,13 +19,13 @@ import {
 } from "lucide-react"
 import bannerDesktop from "@/assets/banner.jpg"
 import bannerMobile from "@/assets/banner-mobile.jpg"
-import logo from "@/assets/logo.png"
 import { dicas } from "@/content/dicas"
 import { galeria } from "@/content/galeria"
 import { reels } from "@/content/reels"
 import { Gallery } from "@/components/site/gallery"
 import { InstagramReels } from "@/components/site/instagram-reels"
 import { InstagramIcon, WhatsAppIcon } from "@/components/site/brand-icons"
+import { MovingTruck } from "@/components/site/moving-truck"
 import { Reveal } from "@/components/site/reveal"
 import { instagramUrl, site, whatsappUrl } from "@/lib/site"
 
@@ -208,8 +208,8 @@ export default function Home() {
       <Section id="sobre-nos" alt>
         <SectionTitle title="Conheça a Sampaio" subtitle="Mais do que uma transportadora, somos parceiros na sua nova jornada." />
         <div className="grid items-center gap-10 md:grid-cols-2">
-          <Reveal index={0} className="rounded-2xl border border-border bg-white p-10 shadow-lg shadow-black/20">
-            <Image src={logo} alt="Logotipo da Sampaio Fretes e Mudanças" sizes="(min-width: 768px) 40vw, 90vw" className="mx-auto h-auto w-full max-w-sm" />
+          <Reveal index={0} className="overflow-hidden rounded-2xl border border-border shadow-lg shadow-black/20">
+            <MovingTruck />
           </Reveal>
           <Reveal index={1} className="space-y-5">
             <div>

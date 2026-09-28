@@ -99,6 +99,27 @@ body {
   }
 }
 
+/* Mapa de cobertura: destaque de hover nos estados já atendidos */
+.map-state-highlight {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 0.25s ease-out,
+    filter 0.25s ease-out;
+}
+.map-state-highlight:hover {
+  transform: scale(1.04);
+  filter: brightness(1.15) drop-shadow(0 0 6px rgba(255, 193, 7, 0.6));
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-state-highlight {
+    transition: none;
+  }
+  .map-state-highlight:hover {
+    transform: none;
+  }
+}
+
 /* Tipografia dos artigos (dicas e páginas legais) */
 .prose-site h2 {
   font-family: var(--font-poppins);

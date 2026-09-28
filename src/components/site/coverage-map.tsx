@@ -23,6 +23,7 @@ export function CoverageMap() {
               strokeOpacity="0.35"
               strokeWidth="1"
               strokeLinejoin="round"
+              className={atendido ? "map-state-highlight" : undefined}
             >
               <title>
                 {state.name}

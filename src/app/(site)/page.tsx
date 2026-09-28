@@ -21,7 +21,7 @@ import {
 } from "lucide-react"
 import bannerDesktop from "@/assets/banner.jpg"
 import bannerMobile from "@/assets/banner-mobile.jpg"
-import sobreFoto from "@/assets/galeria/2.jpg"
+import logoTransparente from "@/assets/logo-transparente.png"
 import { dicas } from "@/content/dicas"
 import { galeria } from "@/content/galeria"
 import { reels } from "@/content/reels"
@@ -30,7 +30,6 @@ import { InstagramReels } from "@/components/site/instagram-reels"
 import { InstagramIcon, WhatsAppIcon } from "@/components/site/brand-icons"
 import { CoverageMap } from "@/components/site/coverage-map"
 import { Reveal } from "@/components/site/reveal"
-import { SobreFoto } from "@/components/site/sobre-foto"
 import { instagramUrl, site, whatsappUrl } from "@/lib/site"
 
 const servicos = [
@@ -248,8 +247,13 @@ export default function Home() {
       <Section id="sobre-nos" alt>
         <SectionTitle title="Conheça a Sampaio" subtitle="Mais do que uma transportadora, somos parceiros na sua nova jornada." />
         <div className="grid items-center gap-10 md:grid-cols-2">
-          <Reveal index={0} className="overflow-hidden rounded-2xl border border-border shadow-lg shadow-black/20">
-            <SobreFoto src={sobreFoto} alt="Equipe da Sampaio Fretes e Mudanças em ação" />
+          <Reveal index={0} className="overflow-hidden rounded-2xl border border-border bg-white p-10 shadow-lg shadow-black/20">
+            <Image
+              src={logoTransparente}
+              alt="Logotipo da Sampaio Fretes e Mudanças"
+              sizes="(min-width: 768px) 40vw, 90vw"
+              className="mx-auto h-auto w-full max-w-sm"
+            />
           </Reveal>
           <Reveal index={1} className="space-y-5">
             <div>
@@ -291,8 +295,8 @@ export default function Home() {
         <div className="grid gap-6 md:grid-cols-3">
           {dicas.map((d, i) => (
             <Reveal key={d.slug} as="article" index={i} className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-surface">
-              <div className="relative aspect-[16/9] overflow-hidden">
-                <Image src={d.image} alt={d.imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" placeholder="blur" />
+              <div className="relative aspect-[16/9] overflow-hidden bg-white">
+                <Image src={d.image} alt={d.imageAlt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <h3 className="mb-2 font-display text-lg font-semibold">{d.title}</h3>

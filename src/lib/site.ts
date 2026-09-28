@@ -14,6 +14,10 @@ export const site = {
     city: "Vila Velha",
     state: "ES",
   },
+  businessHours: [
+    { label: "Segunda a sexta", value: "8h às 18h" },
+    { label: "Sábado", value: "8h às 12h" },
+  ],
   launchYear: 2025,
   developer: {
     name: "Eduardo Allochio",

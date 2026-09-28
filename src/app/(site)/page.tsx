@@ -8,9 +8,9 @@ import {
   Calendar,
   Camera,
   CreditCard,
+  Clock,
   HandCoins,
   Hourglass,
-  IdCard,
   MapPin,
   MessageSquareQuote,
   Phone,
@@ -28,6 +28,7 @@ import { reels } from "@/content/reels"
 import { Gallery } from "@/components/site/gallery"
 import { InstagramReels } from "@/components/site/instagram-reels"
 import { InstagramIcon, WhatsAppIcon } from "@/components/site/brand-icons"
+import { CoverageMap } from "@/components/site/coverage-map"
 import { Reveal } from "@/components/site/reveal"
 import { SobreFoto } from "@/components/site/sobre-foto"
 import { instagramUrl, site, whatsappUrl } from "@/lib/site"
@@ -133,6 +134,10 @@ const jsonLd = {
   },
   areaServed: ["Vila Velha", "Vitória", "Serra", "Cariacica", "Guarapari", "Brasil"],
   sameAs: [instagramUrl],
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "18:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "08:00", closes: "12:00" },
+  ],
   mainEntityOfPage: {
     "@type": "FAQPage",
     mainEntity: faq.map((f) => ({
@@ -401,25 +406,35 @@ export default function Home() {
 
       <Section id="contato" alt>
         <SectionTitle title="Entre em Contato" subtitle="Estamos prontos para atender você! Tire suas dúvidas ou solicite uma visita técnica." />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <ContactCard icon={<Phone />} title="Telefone / WhatsApp" index={0}>
-            <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="text-brand-400 hover:underline">
-              {site.phoneDisplay}
-            </a>
-          </ContactCard>
-          <ContactCard icon={<InstagramIcon />} title="Instagram" index={1}>
-            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="break-all text-brand-400 hover:underline">
-              @{site.instagram}
-            </a>
-          </ContactCard>
-          <ContactCard icon={<MapPin />} title="Endereço" index={2}>
-            {site.address.neighborhood} — {site.address.city} — {site.address.state}
-            <br />
-            <span className="text-sm">Atendemos toda a Grande Vitória e demais regiões</span>
-          </ContactCard>
-          <ContactCard icon={<IdCard />} title="CNPJ" index={3}>
-            {site.cnpj}
-          </ContactCard>
+        <div className="grid items-start gap-8 lg:grid-cols-2">
+          <Reveal index={0}>
+            <CoverageMap />
+          </Reveal>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <ContactCard icon={<Phone />} title="Telefone / WhatsApp" index={1}>
+              <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="text-brand-400 hover:underline">
+                {site.phoneDisplay}
+              </a>
+            </ContactCard>
+            <ContactCard icon={<InstagramIcon />} title="Instagram" index={2}>
+              <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="break-all text-brand-400 hover:underline">
+                @{site.instagram}
+              </a>
+            </ContactCard>
+            <ContactCard icon={<MapPin />} title="Endereço" index={3}>
+              {site.address.neighborhood} — {site.address.city} — {site.address.state}
+              <br />
+              <span className="text-sm">Atendemos toda a Grande Vitória e demais regiões</span>
+            </ContactCard>
+            <ContactCard icon={<Clock />} title="Atendimento" index={4}>
+              {site.businessHours.map((h) => (
+                <span key={h.label} className="block text-sm">
+                  {h.label}: {h.value}
+                </span>
+              ))}
+            </ContactCard>
+          </div>
         </div>
       </Section>
     </>
